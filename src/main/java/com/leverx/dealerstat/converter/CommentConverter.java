@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class CommentsConverter {
+public class CommentConverter {
 
     private final UserService userService;
 
     @Autowired
-    public CommentsConverter(UserService userService) {
+    public CommentConverter(UserService userService) {
         this.userService = userService;
     }
 

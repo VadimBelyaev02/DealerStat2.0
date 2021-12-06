@@ -1,14 +1,14 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.CommentsConverter;
-import com.leverx.dealerstat.converter.UsersConverter;
+import com.leverx.dealerstat.converter.CommentConverter;
+import com.leverx.dealerstat.converter.UserConverter;
 import com.leverx.dealerstat.dto.CommentDTO;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Comment;
 import com.leverx.dealerstat.entity.User;
-import com.leverx.dealerstat.repository.CommentsRepository;
+import com.leverx.dealerstat.repository.CommentRepository;
 import com.leverx.dealerstat.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,22 +20,22 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentsRepository repository;
-    private final CommentsConverter commentsConverter;
-    private final UsersConverter usersConverter;
+    private final CommentRepository repository;
+    private final CommentConverter commentConverter;
+    private final UserConverter userConverter;
 
     @Autowired
-    public CommentServiceImpl(CommentsRepository repository, CommentsConverter commentsConverter, UsersConverter usersConverter) {
+    public CommentServiceImpl(CommentRepository repository, CommentConverter commentConverter, UserConverter userConverter) {
         this.repository = repository;
-        this.commentsConverter = commentsConverter;
-        this.usersConverter = usersConverter;
+        this.commentConverter = commentConverter;
+        this.userConverter = userConverter;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CommentDTO> getComments(Long userId) {
         return repository.findAllByAuthorId(userId).stream()
-                .map(commentsConverter::convertToDTO)
+                .map(commentConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = repository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException("Comment is not found");
         });
-        return commentsConverter.convertToDTO(comment);
+        return commentConverter.convertToDTO(comment);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
         if (repository.existsById(comment.getId())) {
             throw new AlreadyExistsException("Comment is already exists");
         }
-        return commentsConverter.convertToDTO(repository.save(commentsConverter.convertToModel(comment)));
+        return commentConverter.convertToDTO(repository.save(commentConverter.convertToModel(comment)));
     }
 
     @Override
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = repository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException("Comment is not found");
         });
-        return usersConverter.convertToDTO(comment.getAuthor());
+        return userConverter.convertToDTO(comment.getAuthor());
     }
 
     @Override
@@ -106,35 +106,33 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public List<Comment> findAll() {
-        return repository.findAll();
+    public List<CommentDTO> findAll() {
+        return repository.findAll().stream()
+                .map(commentConverter::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public Comment updateComment(Comment comment, Long id) {
-        Comment commentFromDB = repository.findById(id).orElse(null);
-        if (commentFromDB == null || !commentFromDB.getApproved()) {
+    public CommentDTO updateComment(CommentDTO comment) {
+        if (!repository.existsById(comment.getId())) {
             throw new NotFoundException("Comment is not found or is not approved");
         }
-        commentFromDB.setMessage(comment.getMessage());
-        commentFromDB.setRate(comment.getRate());
-        return repository.save(commentFromDB);
+        return commentConverter.convertToDTO(repository.save(commentConverter.convertToModel(comment)));
     }
 
     @Override
     @Transactional
-    public List<Comment> getUnapprovedComments() {
+    public List<CommentDTO> getUnapprovedComments() {
         return repository.findAllByApproved(false);
     }
 
     @Override
     @Transactional
-    public Comment approveComment(Long commentId) {
-        Comment commentFromDB = repository.findById(commentId).orElseThrow(() -> {
+    public CommentDTO approveComment(CommentDTO comment) {
+        if (!repository.existsById(comment.getId())) {
             throw new NotFoundException("Comment is not found");
-        });
-        commentFromDB.setApproved(true);
-        return repository.save(commentFromDB);
+        };
+        return commentConverter.convertToDTO(repository.save(commentConverter.convertToModel(comment)));
     }
 }
