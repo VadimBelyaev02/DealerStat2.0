@@ -1,17 +1,15 @@
 package com.leverx.dealerstat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DealDTO {
+public class DealDTO extends BaseDTO{
 
     private Date date;
     private Long fromId;

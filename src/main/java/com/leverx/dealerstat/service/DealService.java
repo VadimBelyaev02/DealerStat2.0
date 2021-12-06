@@ -1,10 +1,10 @@
 package com.leverx.dealerstat.service;
 
-import com.leverx.dealerstat.model.Deal;
+import com.leverx.dealerstat.entity.Deal;
 
 import java.util.List;
 
-public interface DealsService {
+public interface DealService {
     List<Deal> findAll();
 
     Deal findById(Long id);

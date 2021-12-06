@@ -1,10 +1,10 @@
 package com.leverx.dealerstat.service.impl;
 
 import com.leverx.dealerstat.exception.NotFoundException;
-import com.leverx.dealerstat.model.Deal;
-import com.leverx.dealerstat.model.GameObject;
-import com.leverx.dealerstat.repository.DealsRepository;
-import com.leverx.dealerstat.service.DealsService;
+import com.leverx.dealerstat.entity.Deal;
+import com.leverx.dealerstat.entity.GameObject;
+import com.leverx.dealerstat.repository.DealRepository;
+import com.leverx.dealerstat.service.DealService;
 import com.leverx.dealerstat.service.GameObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class DealsServiceImpl implements DealsService {
+public class DealServiceImpl implements DealService {
 
-    private final DealsRepository repository;
+    private final DealRepository repository;
     private final GameObjectService gameObjectService;
 
     @Autowired
-    public DealsServiceImpl(DealsRepository repository, GameObjectService gameObjectService) {
+    public DealServiceImpl(DealRepository repository, GameObjectService gameObjectService) {
         this.repository = repository;
         this.gameObjectService = gameObjectService;
     }

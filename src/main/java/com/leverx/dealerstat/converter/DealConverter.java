@@ -1,22 +1,22 @@
 package com.leverx.dealerstat.converter;
 
 import com.leverx.dealerstat.dto.DealDTO;
-import com.leverx.dealerstat.model.Deal;
-import com.leverx.dealerstat.model.User;
-import com.leverx.dealerstat.service.UsersService;
+import com.leverx.dealerstat.entity.Deal;
+import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
-public class DealsConverter {
+public class DealConverter {
 
-    private final UsersService usersService;
+    private final UserService userService;
 
     @Autowired
-    public DealsConverter(UsersService usersService) {
-        this.usersService = usersService;
+    public DealConverter(UserService userService) {
+        this.userService = userService;
     }
 
     public DealDTO convertToDTO(final Deal deal) {
@@ -32,8 +32,8 @@ public class DealsConverter {
 
     public Deal convertToModel(final DealDTO dealDTO) {
         final Date date = new Date();
-        final User fromUser = usersService.findById(dealDTO.getFromId());
-        final User toUser = usersService.findById(dealDTO.getToId());
+        final User fromUser = userService.findById(dealDTO.getFromId());
+        final User toUser = userService.findById(dealDTO.getToId());
         return Deal.builder()
                 .date(date)
                 .fromUser(fromUser)
