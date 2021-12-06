@@ -14,19 +14,19 @@ public interface CommentsService {
 
     void deleteComment(Long commentId);
 
-    void addComment(Comment comment);
+    Comment save(Comment comment);
 
     User getAuthor(Long commentId);
 
     Double calculateRating(Long userId);
 
-    Map<User, Double> calculateAllRating(Boolean ascending);
+    Map<User, Double> calculateAllRating();
 
     List<Comment> findAll();
 
-    void updateComment(Comment comment, Long id);
+    Comment updateComment(Comment comment, Long id);
 
     List<Comment> getUnapprovedComments();
 
-    void approveComment(Long commentId);
+    Comment approveComment(Long commentId);
 }
