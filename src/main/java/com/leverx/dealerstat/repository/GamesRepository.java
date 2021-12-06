@@ -1,19 +1,11 @@
 package com.leverx.dealerstat.repository;
 
 import com.leverx.dealerstat.model.Game;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
-public interface GamesRepository {
+public interface GamesRepository extends JpaRepository<Game, Long> {
 
     boolean existsByName(String name);
-
-    Game save(Game game);
-
-    List<Game> findAll();
-
-    Optional<Game> findById(Long id);
 }
