@@ -21,7 +21,7 @@ public class Confirmation extends BaseEntity{
     @Column(name = "expiration_time")
     private Date expirationTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

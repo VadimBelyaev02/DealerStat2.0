@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/games")
 public class GamesController {
 
     private final GamesService gamesService;
@@ -28,20 +29,20 @@ public class GamesController {
         this.userFactory = userFactory;
     }
 
-    @GetMapping("/games")
+    @GetMapping
     public ResponseEntity<List<GameDTO>> getAllGames() {
         List<GameDTO> gameDTOS = gamesService.findAll().stream().map(converter::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(gameDTOS);
     }
 
-    @PostMapping("/games")
+    @PostMapping
     public ResponseEntity<?> addGame(@RequestBody GameDTO gameDTO) {
         gamesService.save(converter.convertToModel(gameDTO));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/games/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateGame(@RequestBody GameDTO gameDTO,
                                         @PathVariable("id") Long id) {
         gamesService.update(converter.convertToModel(gameDTO), id);

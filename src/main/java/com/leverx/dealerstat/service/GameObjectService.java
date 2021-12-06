@@ -14,4 +14,6 @@ public interface GameObjectService {
     List<GameObject> findAllByAuthorId(Long id);
 
     void update(GameObject gameObject, Long id);
+
+
 }

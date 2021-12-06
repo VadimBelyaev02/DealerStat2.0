@@ -22,7 +22,7 @@ public class GameObjectServiceImpl implements GameObjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public GameObject findById(Long gameObjectId) {
         return repository.findById(gameObjectId).orElseThrow(() -> {
             throw new NotFoundException("Game object is not found");
@@ -30,7 +30,7 @@ public class GameObjectServiceImpl implements GameObjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<GameObject> findAll() {
         return repository.findAll();
     }
@@ -42,7 +42,7 @@ public class GameObjectServiceImpl implements GameObjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<GameObject> findAllByAuthorId(Long id) {
         return repository.findAllByAuthorId(id);
     }
@@ -50,12 +50,12 @@ public class GameObjectServiceImpl implements GameObjectService {
     @Override
     @Transactional
     public void update(GameObject gameObject, Long id) {
-        GameObject gameObjectFromDB = repository.findById(id).orElseThrow(() -> {
+        if (!repository.existsById(id)) {
             throw new NotFoundException("Game object is not found");
-        });
-        gameObjectFromDB.setDateOfUpdating(new Date());
-        gameObjectFromDB.setPrice(gameObject.getPrice());
-        gameObjectFromDB.setDescription(gameObject.getDescription());
-        gameObjectFromDB.setTitle(gameObject.getTitle());
+        }
+        gameObject.setId(id);
+        repository.save(gameObject);
     }
+
+
 }
