@@ -2,6 +2,7 @@ package com.leverx.dealerstat.service.impl;
 
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
+import com.leverx.dealerstat.model.Confirmation;
 import com.leverx.dealerstat.model.Role;
 import com.leverx.dealerstat.model.User;
 import com.leverx.dealerstat.repository.ConfirmationsRepository;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service("userServiceImpl")
 public class UsersServiceImpl implements UsersService {
@@ -35,9 +37,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public void save(User user) throws AlreadyExistsException {
+    public User save(User user) throws AlreadyExistsException {
         if (repository.existsByEmail(user.getEmail())) {
-            throw new AlreadyExistsException("The user already exists");
+            throw new AlreadyExistsException("User is already exists");
         }
 
         user.setPassword(encoder.encode(user.getPassword()));
@@ -45,17 +47,29 @@ public class UsersServiceImpl implements UsersService {
         user.setRole(Role.USER);
         user.setCreatingDate(new Date());
 
+        int oneDayInMilliseconds = 16040;
+        String code = UUID.randomUUID().toString();
+        Date expirationTime = new Date(new Date().getTime() + oneDayInMilliseconds);
+
+        Confirmation confirmation = new Confirmation();
+        confirmation.setCode(code);
+        confirmation.setExpirationTime(expirationTime);
+        confirmation.setUser(user);
+
+        user.setConfirmation(confirmation);
         repository.save(user);
+     //   confirmationsRepository.save(confirmation);
+        return user;
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         return repository.findAll();
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User findById(Long id) {
         return repository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("User is not found");
@@ -74,7 +88,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User findByEmail(String email) throws NotFoundException {
         return repository.findByEmail(email).orElseThrow(() -> {
             throw new UsernameNotFoundException("User doesn't exist");
@@ -94,11 +108,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public void becomeTrader(User user) {
-        User userFromDB = repository.findById(user.getId()).orElseThrow(() -> {
-            throw new NotFoundException("User doesn't exist");
-        });;
-        userFromDB.setRole(Role.TRADER);
-        repository.save(userFromDB);
+    public User becomeTrader(User user) {
+        user.setRole(Role.TRADER);
+        return repository.save(user);
     }
 }

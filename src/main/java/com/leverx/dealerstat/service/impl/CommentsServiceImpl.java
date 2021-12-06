@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CommentsServiceImpl implements CommentsService {
@@ -60,14 +57,14 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Double calculateRating(Long userId) {
         List<Comment> comments = repository.findAllByUserId(userId);
         return (comments.stream().map(Comment::getRate).reduce(0D, Double::sum))
                 / (long) comments.size();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Map<User, Double> calculateAllRating() {
         List<Comment> comments = repository.findAll();
         Map<User, Integer> countOfRates = new HashMap<>();

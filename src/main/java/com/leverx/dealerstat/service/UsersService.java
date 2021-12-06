@@ -7,7 +7,7 @@ import com.leverx.dealerstat.model.User;
 import java.util.List;
 
 public interface UsersService {
-    void save(User user) throws AlreadyExistsException;
+    User save(User user) throws AlreadyExistsException;
 
     List<User> findAll();
 
@@ -19,6 +19,6 @@ public interface UsersService {
 
     void recoverPassword(User user, String password);
 
-    void becomeTrader(User user);
+    User becomeTrader(User user);
 }
 
