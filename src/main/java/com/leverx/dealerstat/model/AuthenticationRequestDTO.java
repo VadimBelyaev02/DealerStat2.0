@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.dto;
+package com.leverx.dealerstat.model;
 
 import lombok.Data;
 

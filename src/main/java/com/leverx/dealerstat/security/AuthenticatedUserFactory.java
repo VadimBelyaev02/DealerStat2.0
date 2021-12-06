@@ -1,7 +1,8 @@
 package com.leverx.dealerstat.security;
 
-import com.leverx.dealerstat.model.User;
-import com.leverx.dealerstat.service.UsersService;
+import com.leverx.dealerstat.converter.UsersConverter;
+import com.leverx.dealerstat.dto.UserDTO;
+import com.leverx.dealerstat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,17 +12,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticatedUserFactory {
 
-    private final UsersService usersService;
+    private final UserService userService;
+    private final UsersConverter usersConverter;
 
     @Autowired
-    public AuthenticatedUserFactory(UsersService usersService) {
-        this.usersService = usersService;
+    public AuthenticatedUserFactory(UserService userService, UsersConverter usersConverter) {
+        this.userService = userService;
+        this.usersConverter = usersConverter;
     }
 
-    public User currentUser() {
+    public UserDTO currentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
-        return usersService.findByEmail(email);
+        return usersConverter.convertToDTO(userService.findByEmail(email));
     }
 }

@@ -1,15 +1,15 @@
 package com.leverx.dealerstat.controller;
 
 import com.leverx.dealerstat.converter.UsersConverter;
-import com.leverx.dealerstat.dto.AuthenticationRequestDTO;
+import com.leverx.dealerstat.model.AuthenticationRequestDTO;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
-import com.leverx.dealerstat.model.User;
+import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.security.JwtTokenProvider;
-import com.leverx.dealerstat.service.ConfirmationsService;
+import com.leverx.dealerstat.service.ConfirmationService;
 import com.leverx.dealerstat.service.MailSenderService;
-import com.leverx.dealerstat.service.UsersService;
+import com.leverx.dealerstat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,40 +26,38 @@ import java.util.Map;
 public class AuthorizationController {
 
     private final MailSenderService senderService;
-    private final UsersService usersService;
+    private final UserService userService;
     private final UsersConverter converter;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
-    private final ConfirmationsService confirmationsService;
+    private final ConfirmationService confirmationService;
 
     @Autowired
     public AuthorizationController(MailSenderService senderService,
-                                   UsersService usersService,
-                                   ConfirmationsService confirmationsService,
+                                   UserService userService,
+                                   ConfirmationService confirmationService,
                                    UsersConverter converter, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
         this.senderService = senderService;
-        this.usersService = usersService;
-        this.confirmationsService = confirmationsService;
+        this.userService = userService;
+        this.confirmationService = confirmationService;
         this.converter = converter;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
     }
 
-
     @GetMapping("/confirm")
     public ResponseEntity<UserDTO> confirmRegistration(@RequestParam("code") String code) {
-        User user = confirmationsService.findUserByCode(code);
+        User user = confirmationService.findUserByCode(code);
         if (user == null || user.isConfirmed()) {
             return ResponseEntity.notFound().build();
         }
-        usersService.confirm(user);
+        userService.confirm(user);
         return ResponseEntity.ok().build();
     }
 
-
     @PostMapping("/forgot_password")
     public ResponseEntity<?> recoverPassword(@RequestParam("email") String email) {
-        User user = usersService.findByEmail(email);
+        User user = userService.findByEmail(email);
       //  confirmationsService.save(user);
         senderService.sendMessageToRecoverPassword(user);
         return ResponseEntity.ok().build();
@@ -68,17 +66,17 @@ public class AuthorizationController {
     @PostMapping("/reset")
     public ResponseEntity<?> confirmRecovering(@RequestParam("code") String code,
                                                @RequestParam("password") String password) {
-        User user = confirmationsService.findUserByCode(code);
+        User user = confirmationService.findUserByCode(code);
         if (user == null || !user.isConfirmed()) {
             return new ResponseEntity<>("User is already confirmed", HttpStatus.CONFLICT);
         }
-        usersService.recoverPassword(user, password);
+        userService.recoverPassword(user, password);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/check_code")
     public ResponseEntity<String> checkCode(@RequestParam String code) {
-        return ResponseEntity.ok(confirmationsService.checkCode(code));
+        return ResponseEntity.ok(confirmationService.checkCode(code));
     }
 
     @PostMapping("/login")
@@ -87,7 +85,7 @@ public class AuthorizationController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     requestDTO.getEmail(), requestDTO.getPassword()));
 
-            User user = usersService.findByEmail(requestDTO.getEmail());
+            User user = userService.findByEmail(requestDTO.getEmail());
             if (!user.isConfirmed()) {
                 throw new NotFoundException("User is not confirmed");
             }
@@ -107,7 +105,7 @@ public class AuthorizationController {
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO user) {
         User userEntity = converter.convertToModel(user);
         try {
-            userEntity = usersService.save(userEntity);
+            userEntity = userService.save(userEntity);
             senderService.sendVerificationCode(userEntity);
         } catch (AlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

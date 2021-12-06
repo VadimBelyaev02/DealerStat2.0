@@ -30,7 +30,6 @@ public class AppConfig {
         this.environment = environment;
     }
 
-
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -40,7 +39,6 @@ public class AppConfig {
         dataSource.setUrl(environment.getRequiredProperty("db.url"));
         return dataSource;
     }
-
 
     @Bean("entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean() {
@@ -67,5 +65,4 @@ public class AppConfig {
     public HibernateJpaVendorAdapter hibernateJpaVendorAdapter() {
         return new HibernateJpaVendorAdapter();
     }
-
 }
