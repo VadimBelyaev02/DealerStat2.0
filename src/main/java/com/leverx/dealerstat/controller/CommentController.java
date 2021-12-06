@@ -24,10 +24,7 @@ public class CommentController {
     private final AuthenticatedUserFactory userFactory;
 
     @Autowired
-    public CommentController(UserService userService,
-                             CommentService commentService,
-                             CommentConverter commentConverter,
-                             UserConverter userConverter,
+    public CommentController(CommentService commentService,
                              AuthenticatedUserFactory userFactory) {
         this.commentService = commentService;
         this.userFactory = userFactory;

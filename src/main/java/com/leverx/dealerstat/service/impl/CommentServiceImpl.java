@@ -85,11 +85,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     public Map<UserDTO, Double> calculateAllRating() {
-        List<Comment> comments = repository.findAll();
+        List<CommentDTO> comments = repository.findAll().stream()
+                .map(commentConverter::convertToDTO)
+                .collect(Collectors.toList());
         Map<UserDTO, Integer> countOfRates = new HashMap<>();
         Map<UserDTO, Double> rating = new LinkedHashMap<>();
-        for (Comment comment : comments) {
-            User user = comment.getUser();
+        for (CommentDTO comment : comments) {
+            User user = comment.getUserId();
             if (rating.containsKey(user)) {
                 rating.put(user, rating.get(user) + comment.getRate());
                 countOfRates.put(user, countOfRates.get(user) + 1);
@@ -124,7 +126,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public List<CommentDTO> getUnapprovedComments() {
-        return repository.findAllByApproved(false);
+        return repository.findAllByApproved(false).stream()
+                .map(commentConverter::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
