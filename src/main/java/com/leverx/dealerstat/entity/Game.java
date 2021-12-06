@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.model;
+package com.leverx.dealerstat.entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

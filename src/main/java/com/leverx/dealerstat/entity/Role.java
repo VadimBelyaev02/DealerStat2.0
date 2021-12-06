@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.model;
+package com.leverx.dealerstat.entity;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

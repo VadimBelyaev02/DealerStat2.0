@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.model;
+package com.leverx.dealerstat.entity;
 
 //public enum Permission {
 //    READ("read"),
