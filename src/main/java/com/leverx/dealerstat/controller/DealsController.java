@@ -4,15 +4,15 @@ import com.leverx.dealerstat.converter.DealsConverter;
 import com.leverx.dealerstat.dto.DealDTO;
 import com.leverx.dealerstat.service.DealsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/deals")
 public class DealsController {
 
     private final DealsService dealsService;
@@ -25,19 +25,24 @@ public class DealsController {
     }
 
 
-    @GetMapping("/deals")
+    @GetMapping
     public ResponseEntity<List<DealDTO>> getAllDeals() {
         List<DealDTO> dealDTOS = dealsService.findAll().stream().map(converter::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dealDTOS);
     }
 
-    @GetMapping("/deals/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DealDTO> getDeal(@PathVariable("id") Long id) {
         DealDTO dealDTO = converter.convertToDTO(dealsService.findById(id));
         return ResponseEntity.ok(dealDTO);
     }
 
+    @PostMapping
+    public ResponseEntity<?> addDeal(@RequestBody DealDTO dealDTO) {
+        dealsService.save(converter.convertToModel(dealDTO));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }
