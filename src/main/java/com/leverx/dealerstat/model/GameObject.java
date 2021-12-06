@@ -22,7 +22,7 @@ public class GameObject extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
 
@@ -34,6 +34,9 @@ public class GameObject extends BaseEntity {
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @OneToMany(mappedBy = "gameObject", cascade = CascadeType.ALL)
+    private List<Deal> deals;
 
     @ManyToMany
     @JoinTable(name = "gameobject_game",
