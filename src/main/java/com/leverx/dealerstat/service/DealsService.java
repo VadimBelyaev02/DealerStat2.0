@@ -8,4 +8,6 @@ public interface DealsService {
     List<Deal> findAll();
 
     Deal findById(Long id);
+
+    void save(Deal deal);
 }

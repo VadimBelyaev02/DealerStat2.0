@@ -22,8 +22,20 @@ public class Deal extends BaseEntity{
     private User fromUser;
 
     @ManyToOne
+    @JoinColumn(name = "object_id")
+    private GameObject gameObject;
+
+    @ManyToOne
     @JoinColumn(name = "to_id")
     private User toUser;
+
+    public GameObject getGameObject() {
+        return gameObject;
+    }
+
+    public void setGameObject(GameObject gameObject) {
+        this.gameObject = gameObject;
+    }
 
     public Date getDate() {
         return date;
