@@ -1,6 +1,6 @@
 package com.leverx.dealerstat.repository;
 
-import com.leverx.dealerstat.model.Comment;
+import com.leverx.dealerstat.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

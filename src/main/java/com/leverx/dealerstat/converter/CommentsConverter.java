@@ -1,9 +1,9 @@
 package com.leverx.dealerstat.converter;
 
 import com.leverx.dealerstat.dto.CommentDTO;
-import com.leverx.dealerstat.model.Comment;
-import com.leverx.dealerstat.model.User;
-import com.leverx.dealerstat.service.UsersService;
+import com.leverx.dealerstat.entity.Comment;
+import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +12,11 @@ import java.util.Date;
 @Component
 public class CommentsConverter {
 
-    private final UsersService usersService;
+    private final UserService userService;
 
     @Autowired
-    public CommentsConverter(UsersService usersService) {
-        this.usersService = usersService;
+    public CommentsConverter(UserService userService) {
+        this.userService = userService;
     }
 
     public CommentDTO convertToDTO(final Comment comment) {
@@ -35,10 +35,10 @@ public class CommentsConverter {
     public Comment convertToModel(final CommentDTO commentDTO) {
         final String message = commentDTO.getMessage();
         final Double rate = commentDTO.getRate();
-        final User author = usersService.findById(commentDTO.getAuthorId());
+        final User author = userService.findById(commentDTO.getAuthorId());
         final boolean approved = false;
         final Date createdAt = commentDTO.getCreatedAt() == null ? new Date() : commentDTO.getCreatedAt();
-        final User user = usersService.findById(commentDTO.getUserId());
+        final User user = userService.findById(commentDTO.getUserId());
         return Comment.builder()
                 .message(message)
                 .rate(rate)

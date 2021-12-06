@@ -1,59 +1,78 @@
 package com.leverx.dealerstat.service.impl;
 
+import com.leverx.dealerstat.converter.CommentsConverter;
+import com.leverx.dealerstat.converter.UsersConverter;
+import com.leverx.dealerstat.dto.CommentDTO;
+import com.leverx.dealerstat.dto.UserDTO;
+import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
-import com.leverx.dealerstat.model.Comment;
-import com.leverx.dealerstat.model.User;
+import com.leverx.dealerstat.entity.Comment;
+import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.repository.CommentsRepository;
-import com.leverx.dealerstat.service.CommentsService;
+import com.leverx.dealerstat.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class CommentsServiceImpl implements CommentsService {
+public class CommentServiceImpl implements CommentService {
 
     private final CommentsRepository repository;
+    private final CommentsConverter commentsConverter;
+    private final UsersConverter usersConverter;
 
     @Autowired
-    public CommentsServiceImpl(CommentsRepository repository) {
+    public CommentServiceImpl(CommentsRepository repository, CommentsConverter commentsConverter, UsersConverter usersConverter) {
         this.repository = repository;
+        this.commentsConverter = commentsConverter;
+        this.usersConverter = usersConverter;
     }
 
     @Override
-    @Transactional
-    public List<Comment> getComments(Long userId) {
-        return repository.findAllByAuthorId(userId);
+    @Transactional(readOnly = true)
+    public List<CommentDTO> getComments(Long userId) {
+        return repository.findAllByAuthorId(userId).stream()
+                .map(commentsConverter::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional
-    public Comment getComment(Long commentId) {
-        return repository.findById(commentId).orElseThrow(() -> {
+    @Transactional(readOnly = true)
+    public CommentDTO getComment(Long commentId) {
+        Comment comment = repository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException("Comment is not found");
         });
+        return commentsConverter.convertToDTO(comment);
     }
 
     @Override
     @Transactional
     public void deleteComment(Long commentId) {
+        if (!repository.existsById(commentId)) {
+            throw new NotFoundException("Comment is not found");
+        }
         repository.deleteById(commentId);
     }
 
     @Override
     @Transactional
-    public Comment save(Comment comment) {
-        return repository.save(comment);
+    public CommentDTO save(CommentDTO comment) {
+        if (repository.existsById(comment.getId())) {
+            throw new AlreadyExistsException("Comment is already exists");
+        }
+        return commentsConverter.convertToDTO(repository.save(commentsConverter.convertToModel(comment)));
     }
 
     @Override
     @Transactional
-    public User getAuthor(Long commentId) {
+    public UserDTO getAuthor(Long commentId) {
         Comment comment = repository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException("Comment is not found");
         });
-        return comment.getAuthor();
+        return usersConverter.convertToDTO(comment.getAuthor());
     }
 
     @Override
@@ -65,10 +84,10 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Transactional(readOnly = true)
-    public Map<User, Double> calculateAllRating() {
+    public Map<UserDTO, Double> calculateAllRating() {
         List<Comment> comments = repository.findAll();
-        Map<User, Integer> countOfRates = new HashMap<>();
-        Map<User, Double> rating = new LinkedHashMap<>();
+        Map<UserDTO, Integer> countOfRates = new HashMap<>();
+        Map<UserDTO, Double> rating = new LinkedHashMap<>();
         for (Comment comment : comments) {
             User user = comment.getUser();
             if (rating.containsKey(user)) {
