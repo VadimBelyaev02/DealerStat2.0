@@ -1,13 +1,13 @@
 package com.leverx.dealerstat.converter;
 
 import com.leverx.dealerstat.dto.ConfirmationDTO;
-import com.leverx.dealerstat.model.Confirmation;
+import com.leverx.dealerstat.entity.Confirmation;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
-public class ConfirmationsConverter {
+public class ConfirmationConverter {
 
     public ConfirmationDTO convertToDTO(final Confirmation confirmation) {
         final String code = confirmation.getCode();
