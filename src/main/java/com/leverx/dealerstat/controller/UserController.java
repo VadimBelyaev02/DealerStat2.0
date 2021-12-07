@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -38,12 +38,6 @@ public class UserController {
         return userService.findById(id);
     }
 
-//    @PutMapping("/become_trader")
-//    @ResponseStatus(HttpStatus.OK)
-//    public UserDTO becomeTrader(@RequestBody UserDTO userDTO) {
-//        return userService.becomeTrader(userDTO);
-//    }
-
     @GetMapping("/rating")
     @ResponseStatus(HttpStatus.OK)
     public Map<UserDTO, Double> getAllRatings() {
@@ -66,9 +60,10 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteComment(@PathVariable("id") Long id) {
-        commentService.deleteComment(id);
+    public void deleteUser(@PathVariable("id") Long id) {
+        userService.delete(id);
     }
+
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)

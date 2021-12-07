@@ -1,16 +1,11 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.UserConverter;
+import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.dto.UserDTO;
-import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
-import com.leverx.dealerstat.entity.Confirmation;
-import com.leverx.dealerstat.entity.Role;
 import com.leverx.dealerstat.entity.User;
-import com.leverx.dealerstat.model.RegistrationRequestDTO;
 import com.leverx.dealerstat.repository.ConfirmationRepository;
 import com.leverx.dealerstat.repository.UserRepository;
-import com.leverx.dealerstat.service.MailSenderService;
 import com.leverx.dealerstat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,9 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service("userServiceImpl")
@@ -111,6 +104,14 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("User is not found");
         }
         return userConverter.convertToDTO(userRepository.save(userConverter.convertToModel(userDTO)));
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new NotFoundException("User is not found");
+        }
+        userRepository.deleteById(id);
     }
 
 
