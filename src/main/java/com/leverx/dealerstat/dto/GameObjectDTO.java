@@ -2,6 +2,7 @@ package com.leverx.dealerstat.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -11,13 +12,27 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class GameObjectDTO {
 
+    @NotBlank
     private Long id;
-    private String title;
-    private String description;
-    private Long authorId;
-    private Long gameId;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
-    private BigDecimal price;
 
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String description;
+
+    @NotBlank
+    private Long authorId;
+
+    @NotBlank
+    private Long gameId;
+
+    @NotBlank
+    private LocalDate createdAt;
+
+    @NotBlank
+    private LocalDate updatedAt;
+
+    @NotBlank
+    private BigDecimal price;
 }

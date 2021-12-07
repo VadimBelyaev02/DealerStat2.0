@@ -3,12 +3,15 @@ package com.leverx.dealerstat.controller;
 import com.leverx.dealerstat.dto.CommentDTO;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.exception.AccessDeniedException;
+import com.leverx.dealerstat.exception.NotValidException;
 import com.leverx.dealerstat.security.AuthenticatedUserFactory;
 import com.leverx.dealerstat.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,7 +39,10 @@ public class CommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDTO addComment(@RequestBody CommentDTO commentDTO) {
+    public CommentDTO addComment(@RequestBody @Valid CommentDTO commentDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return commentService.save(commentDTO);
     }
 

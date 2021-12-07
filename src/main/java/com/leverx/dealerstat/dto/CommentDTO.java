@@ -2,6 +2,8 @@ package com.leverx.dealerstat.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.Date;
@@ -19,6 +21,8 @@ public class CommentDTO {
     private String message;
 
     @NotBlank
+    @Min(0)
+    @Max(5)
     private Double rate;
 
     @NotBlank

@@ -39,8 +39,6 @@ public class Comment {
     @Column(name = "approved")
     private Boolean approved;
 
-    @Min(1)
-    @Max(5)
     @Column(name = "rate")
     private Double rate;
 
