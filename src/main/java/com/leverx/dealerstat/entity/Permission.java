@@ -16,7 +16,7 @@ package com.leverx.dealerstat.entity;
 //}
 
 public enum Permission {
-    TRADE("add_object"),
+    TRADE("trade"),
     DELETE("delete"),
     UPDATE("update"),
     READ("read"),

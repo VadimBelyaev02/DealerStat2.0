@@ -12,8 +12,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class UserDTO {
 
+    private Long id;
     private String firstName;
     private String lastName;
+
     @JsonIgnore
     private String password;
     private String email;
