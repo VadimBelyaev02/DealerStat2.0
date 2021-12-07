@@ -43,32 +43,32 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    @Transactional
-    public UserDTO save(UserDTO user) throws AlreadyExistsException {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new AlreadyExistsException("User is already exists");
-        }
-
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setConfirmed(false);
-        user.setRole(Role.USER);
-        user.setCreatingDate(new Date());
-
-        int oneDayInMilliseconds = 16040;
-        String code = UUID.randomUUID().toString();
-        Date expirationTime = new Date(new Date().getTime() + oneDayInMilliseconds);
-
-        Confirmation confirmation = new Confirmation();
-        confirmation.setCode(code);
-        confirmation.setExpirationTime(expirationTime);
-        confirmation.setUser(user);
-
-        user.setConfirmation(confirmation);
-        repository.save(user);
-        //   confirmationsRepository.save(confirmation);
-        return user;
-    }
+//    @Override
+//    @Transactional
+//    public UserDTO save(UserDTO user) throws AlreadyExistsException {
+//        if (userRepository.existsByEmail(user.getEmail())) {
+//            throw new AlreadyExistsException("User is already exists");
+//        }
+//
+//        user.setPassword(encoder.encode(user.getPassword()));
+//        user.setConfirmed(false);
+//        user.setRole(Role.USER);
+//        user.setCreatingDate(new Date());
+//
+//        int oneDayInMilliseconds = 16040;
+//        String code = UUID.randomUUID().toString();
+//        Date expirationTime = new Date(new Date().getTime() + oneDayInMilliseconds);
+//
+//        Confirmation confirmation = new Confirmation();
+//        confirmation.setCode(code);
+//        confirmation.setExpirationTime(expirationTime);
+//        confirmation.setUser(user);
+//
+//        user.setConfirmation(confirmation);
+//        repository.save(user);
+//        //   confirmationsRepository.save(confirmation);
+//        return user;
+//    }
 
     @Override
     @Transactional(readOnly = true)
@@ -98,16 +98,19 @@ public class UserServiceImpl implements UserService {
         return userConverter.convertToDTO(user);
     }
 
-    @Override
-    @Transactional
-    public UserDTO becomeTrader(UserDTO user) {
-        user.setRole(Role.TRADER);
-        return repository.save(user);
-    }
+//    @Override
+//    @Transactional
+//    public UserDTO becomeTrader(UserDTO user) {
+//        user.setRole(Role.TRADER);
+//        return repository.save(user);
+//    }
 
     @Override
     public UserDTO update(UserDTO userDTO) {
-        return null;
+        if (!userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new NotFoundException("User is not found");
+        }
+        return userConverter.convertToDTO(userRepository.save(userConverter.convertToModel(userDTO)));
     }
 
 
