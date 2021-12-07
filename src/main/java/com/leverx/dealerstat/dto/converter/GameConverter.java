@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.converter;
+package com.leverx.dealerstat.dto.converter;
 
 import com.leverx.dealerstat.dto.GameDTO;
 import com.leverx.dealerstat.entity.Game;

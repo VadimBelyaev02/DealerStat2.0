@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -31,10 +32,10 @@ public class GameObject {
     private User author;
 
     @Column(name = "created_at")
-    private Date dateOfCreating;
+    private LocalDate dateOfCreating;
 
     @Column(name = "updated_at")
-    private Date dateOfUpdating;
+    private LocalDate dateOfUpdating;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -48,6 +49,13 @@ public class GameObject {
                inverseJoinColumns = @JoinColumn(name = "game_id", referencedColumnName = "id"))
     private List<Game> games;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -73,19 +81,19 @@ public class GameObject {
         this.author = author;
     }
 
-    public Date getDateOfCreating() {
+    public LocalDate getDateOfCreating() {
         return dateOfCreating;
     }
 
-    public void setDateOfCreating(Date dateOfCreating) {
+    public void setDateOfCreating(LocalDate dateOfCreating) {
         this.dateOfCreating = dateOfCreating;
     }
 
-    public Date getDateOfUpdating() {
+    public LocalDate getDateOfUpdating() {
         return dateOfUpdating;
     }
 
-    public void setDateOfUpdating(Date dateOfUpdating) {
+    public void setDateOfUpdating(LocalDate dateOfUpdating) {
         this.dateOfUpdating = dateOfUpdating;
     }
 
@@ -97,7 +105,13 @@ public class GameObject {
         this.price = price;
     }
 
+    public List<Deal> getDeals() {
+        return deals;
+    }
 
+    public void setDeals(List<Deal> deals) {
+        this.deals = deals;
+    }
 
     public List<Game> getGames() {
         return games;
