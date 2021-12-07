@@ -1,7 +1,7 @@
 package com.leverx.dealerstat.security;
 
-import com.leverx.dealerstat.model.User;
-import com.leverx.dealerstat.repository.UsersRepository;
+import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service("userDetailServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UsersRepository repository;
+    private final UserRepository repository;
 
     @Autowired
-    public UserDetailsServiceImpl(UsersRepository repository) {
+    public UserDetailsServiceImpl(UserRepository repository) {
         this.repository = repository;
     }
 
