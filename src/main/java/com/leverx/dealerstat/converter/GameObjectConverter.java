@@ -1,9 +1,9 @@
 package com.leverx.dealerstat.converter;
 
 import com.leverx.dealerstat.dto.GameObjectDTO;
-import com.leverx.dealerstat.model.GameObject;
-import com.leverx.dealerstat.model.User;
-import com.leverx.dealerstat.service.UsersService;
+import com.leverx.dealerstat.entity.GameObject;
+import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Component
-public class GameObjectsConverter {
+public class GameObjectConverter {
 
-    private final UsersService usersService;
+    private final UserService userService;
 
     @Autowired
-    public GameObjectsConverter(UsersService usersService) {
-        this.usersService = usersService;
+    public GameObjectConverter(UserService userService) {
+        this.userService = userService;
     }
 
     public GameObjectDTO convertToDTO(GameObject gameObject) {
@@ -36,7 +36,7 @@ public class GameObjectsConverter {
     public GameObject convertToModel(final GameObjectDTO gameObjectDTO) {
         final String title = gameObjectDTO.getTitle();
         final String description = gameObjectDTO.getDescription();
-        final User author = usersService.findById(gameObjectDTO.getAuthorId());
+        final User author = userService.findById(gameObjectDTO.getAuthorId());
         final BigDecimal price = gameObjectDTO.getPrice();
         final Date createdAt = new Date();
         final Date updatedAt = new Date();
