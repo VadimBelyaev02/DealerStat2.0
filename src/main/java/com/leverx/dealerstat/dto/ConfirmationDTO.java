@@ -15,5 +15,5 @@ public class ConfirmationDTO {
     private Long id;
     private String code;
     private LocalDate expirationTime;
-    private UserDTO user;
+    private Long userId;
 }

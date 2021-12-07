@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -19,7 +20,7 @@ public class Deal {
     private Long id;
 
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "from_id")
@@ -41,11 +42,11 @@ public class Deal {
         this.gameObject = gameObject;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -63,5 +64,13 @@ public class Deal {
 
     public void setToUser(User toUser) {
         this.toUser = toUser;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

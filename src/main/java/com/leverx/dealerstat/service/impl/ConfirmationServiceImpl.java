@@ -1,7 +1,7 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.ConfirmationConverter;
-import com.leverx.dealerstat.converter.UserConverter;
+import com.leverx.dealerstat.dto.converter.ConfirmationConverter;
+import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Confirmation;
