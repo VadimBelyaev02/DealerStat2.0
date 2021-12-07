@@ -1,6 +1,6 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.GameObjectConverter;
+import com.leverx.dealerstat.dto.converter.GameObjectConverter;
 import com.leverx.dealerstat.dto.GameObjectDTO;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.exception.AccessDeniedException;

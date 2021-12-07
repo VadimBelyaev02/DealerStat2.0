@@ -1,6 +1,6 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.GameConverter;
+import com.leverx.dealerstat.dto.converter.GameConverter;
 import com.leverx.dealerstat.dto.GameDTO;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;

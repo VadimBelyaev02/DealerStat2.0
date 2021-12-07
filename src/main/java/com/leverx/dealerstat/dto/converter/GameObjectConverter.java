@@ -1,31 +1,35 @@
-package com.leverx.dealerstat.converter;
+package com.leverx.dealerstat.dto.converter;
 
 import com.leverx.dealerstat.dto.GameObjectDTO;
 import com.leverx.dealerstat.entity.GameObject;
 import com.leverx.dealerstat.entity.User;
-import com.leverx.dealerstat.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.leverx.dealerstat.repository.GameObjectRepository;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Component
 public class GameObjectConverter {
 
-    private final UserService userService;
+    private final GameObjectRepository gameObjectRepository;
 
-    @Autowired
-    public GameObjectConverter(UserService userService) {
-        this.userService = userService;
+    public GameObjectConverter(GameObjectRepository gameObjectRepository) {
+        this.gameObjectRepository = gameObjectRepository;
     }
 
     public GameObjectDTO convertToDTO(GameObject gameObject) {
+        final Long id = gameObject.getId();
+        final LocalDate createdAt = gameObject.getDateOfCreating();
+        final LocalDate updatedAt = gameObject.getDateOfUpdating();
         final String title = gameObject.getTitle();
         final String description = gameObject.getDescription();
         final Long authorId = gameObject.getAuthor().getId();
         final BigDecimal price = gameObject.getPrice();
         return GameObjectDTO.builder()
+                .id(id)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
                 .title(title)
                 .description(description)
                 .authorId(authorId)
@@ -34,12 +38,13 @@ public class GameObjectConverter {
     }
 
     public GameObject convertToModel(final GameObjectDTO gameObjectDTO) {
+        final Long id = gameObjectDTO.getId();
         final String title = gameObjectDTO.getTitle();
         final String description = gameObjectDTO.getDescription();
-        final User author = userService.findById(gameObjectDTO.getAuthorId());
+        final User author = gameObjectRepository.getById(id).getAuthor();
         final BigDecimal price = gameObjectDTO.getPrice();
-        final Date createdAt = new Date();
-        final Date updatedAt = new Date();
+        final LocalDate createdAt = gameObjectDTO.getCreatedAt();
+        final LocalDate updatedAt = gameObjectDTO.getUpdatedAt();
         return GameObject.builder()
                 .title(title)
                 .description(description)

@@ -14,8 +14,8 @@ public class GameObjectDTO {
     private Long id;
     private String title;
     private String description;
-    private UserDTO author;
-    private GameDTO game;
+    private Long authorId;
+    private Long gameId;
     private LocalDate createdAt;
     private LocalDate updatedAt;
     private BigDecimal price;
