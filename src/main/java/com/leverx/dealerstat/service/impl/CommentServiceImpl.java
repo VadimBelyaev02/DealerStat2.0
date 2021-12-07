@@ -1,7 +1,7 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.CommentConverter;
-import com.leverx.dealerstat.converter.UserConverter;
+import com.leverx.dealerstat.dto.converter.CommentConverter;
+import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.dto.CommentDTO;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.exception.AccessDeniedException;

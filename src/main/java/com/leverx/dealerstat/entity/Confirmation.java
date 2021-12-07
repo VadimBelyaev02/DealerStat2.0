@@ -23,7 +23,7 @@ public class Confirmation {
     @Column(name = "hash_code")
     private String code;
 
-    @Temporal(TemporalType.TIMESTAMP)
+ //   @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expiration_time")
     private LocalDate expirationTime;
 
@@ -53,5 +53,13 @@ public class Confirmation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
