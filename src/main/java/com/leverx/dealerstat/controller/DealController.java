@@ -1,6 +1,5 @@
 package com.leverx.dealerstat.controller;
 
-import com.leverx.dealerstat.converter.DealConverter;
 import com.leverx.dealerstat.dto.DealDTO;
 import com.leverx.dealerstat.service.DealService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,37 +8,45 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/deals")
 public class DealController {
 
     private final DealService dealService;
-    private final DealConverter converter;
 
     @Autowired
-    public DealController(DealService dealService, DealConverter converter) {
+    public DealController(DealService dealService) {
         this.dealService = dealService;
-        this.converter = converter;
     }
 
     @GetMapping
-    public ResponseEntity<List<DealDTO>> getAllDeals() {
-        List<DealDTO> dealDTOS = dealService.findAll().stream().map(converter::convertToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dealDTOS);
+    @ResponseStatus(HttpStatus.OK)
+    public List<DealDTO> getAllDeals() {
+        return dealService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DealDTO> getDeal(@PathVariable("id") Long id) {
-        DealDTO dealDTO = converter.convertToDTO(dealService.findById(id));
-        return ResponseEntity.ok(dealDTO);
+    @ResponseStatus(HttpStatus.OK)
+    public DealDTO getDeal(@PathVariable("id") Long id) {
+        return dealService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> addDeal(@RequestBody DealDTO dealDTO) {
-        dealService.save(converter.convertToModel(dealDTO));
-        return new ResponseEntity<>(HttpStatus.OK);
+    @ResponseStatus(HttpStatus.CREATED)
+    public DealDTO addDeal(@RequestBody DealDTO dealDTO) {
+        return dealService.save(dealDTO);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public DealDTO updateDeal(@RequestBody DealDTO dealDTO) {
+        return dealService.update(dealDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteDeal(@PathVariable("id") Long id) {
+        dealService.delete();
     }
 }
