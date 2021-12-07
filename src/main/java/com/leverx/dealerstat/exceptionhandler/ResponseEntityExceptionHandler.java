@@ -8,13 +8,15 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        ExceptionInfo info = new ExceptionInfo(e.getMessage(), HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity<>(info, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({AccessDeniedException.class})
