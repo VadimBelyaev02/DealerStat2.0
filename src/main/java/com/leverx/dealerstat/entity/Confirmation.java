@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 @Builder
@@ -19,7 +21,7 @@ public class Confirmation extends BaseEntity{
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expiration_time")
-    private Date expirationTime;
+    private LocalDate expirationTime;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -33,11 +35,11 @@ public class Confirmation extends BaseEntity{
         this.code = code;
     }
 
-    public Date getExpirationTime() {
+    public LocalDate getExpirationTime() {
         return expirationTime;
     }
 
-    public void setExpirationTime(Date expirationTime) {
+    public void setExpirationTime(LocalDate expirationTime) {
         this.expirationTime = expirationTime;
     }
 

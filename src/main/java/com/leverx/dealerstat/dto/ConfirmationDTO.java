@@ -2,6 +2,8 @@ package com.leverx.dealerstat.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
@@ -12,5 +14,5 @@ import java.util.Date;
 public class ConfirmationDTO extends BaseDTO {
 
     private String code;
-    private Date expirationTime;
+    private LocalDate expirationTime;
 }

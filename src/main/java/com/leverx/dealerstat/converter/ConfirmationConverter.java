@@ -4,6 +4,8 @@ import com.leverx.dealerstat.dto.ConfirmationDTO;
 import com.leverx.dealerstat.entity.Confirmation;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 @Component
@@ -11,7 +13,7 @@ public class ConfirmationConverter {
 
     public ConfirmationDTO convertToDTO(final Confirmation confirmation) {
         final String code = confirmation.getCode();
-        final Date expirationTime = confirmation.getExpirationTime();
+        final LocalDate expirationTime = confirmation.getExpirationTime();
         return ConfirmationDTO.builder()
                 .code(code)
                 .expirationTime(expirationTime)
@@ -20,7 +22,7 @@ public class ConfirmationConverter {
 
     public Confirmation convertToModel(final ConfirmationDTO confirmationDTO) {
         final String code = confirmationDTO.getCode();
-        final Date expirationTime = confirmationDTO.getExpirationTime();
+        final LocalDate expirationTime = confirmationDTO.getExpirationTime();
         return Confirmation.builder()
                 .code(code)
                 .expirationTime(expirationTime)
