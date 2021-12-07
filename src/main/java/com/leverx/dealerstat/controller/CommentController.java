@@ -28,6 +28,12 @@ public class CommentController {
         return commentService.getComment(commentId);
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentDTO> getAllComments() {
+        return commentService.findAllApproved();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDTO addComment(@RequestBody CommentDTO commentDTO) {
@@ -44,7 +50,6 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     public CommentDTO updateComment(@RequestBody CommentDTO commentDTO) {
         return commentService.updateComment(commentDTO);
-
     }
 
     @GetMapping("/unapproved")
@@ -52,5 +57,4 @@ public class CommentController {
     public List<CommentDTO> getUnapprovedComments() {
         return commentService.getUnapprovedComments();
     }
-
 }

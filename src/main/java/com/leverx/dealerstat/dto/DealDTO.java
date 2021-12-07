@@ -2,6 +2,8 @@ package com.leverx.dealerstat.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -10,9 +12,18 @@ import java.util.Date;
 @AllArgsConstructor
 public class DealDTO {
 
+    @NotBlank
     private Long id;
-    private Date date;
-    private UserDTO from;
-    private UserDTO to;
-    private GameObjectDTO object;
+
+    @NotBlank
+    private LocalDate date;
+
+    @NotBlank
+    private Long fromId;
+
+    @NotBlank
+    private Long toId;
+
+    @NotBlank
+    private Long objectId;
 }

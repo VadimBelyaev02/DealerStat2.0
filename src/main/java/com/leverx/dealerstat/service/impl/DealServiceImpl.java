@@ -1,13 +1,12 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.DealConverter;
+import com.leverx.dealerstat.dto.converter.DealConverter;
 import com.leverx.dealerstat.dto.DealDTO;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Deal;
 import com.leverx.dealerstat.repository.DealRepository;
 import com.leverx.dealerstat.service.DealService;
-import com.leverx.dealerstat.service.GameObjectService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
