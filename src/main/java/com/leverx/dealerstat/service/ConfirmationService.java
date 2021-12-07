@@ -5,7 +5,6 @@ import com.leverx.dealerstat.entity.User;
 
 public interface ConfirmationService {
 
-
     UserDTO findUserByCode(String code);
 
     String checkCode(String code);

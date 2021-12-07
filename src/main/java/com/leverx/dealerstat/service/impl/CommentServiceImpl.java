@@ -152,4 +152,12 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<CommentDTO> findAllApproved() {
+        return commentRepository.findAll().stream()
+                .filter(Comment::getApproved)
+                .map(commentConverter::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 }
