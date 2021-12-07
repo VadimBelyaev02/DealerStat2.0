@@ -17,15 +17,15 @@ public class Deal extends BaseEntity{
     @Column(name = "date")
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "from_id")
     private User fromUser;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "object_id")
     private GameObject gameObject;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "to_id")
     private User toUser;
 
