@@ -1,6 +1,5 @@
 package com.leverx.dealerstat.service.impl;
 
-import com.leverx.dealerstat.converter.UserConverter;
 import com.leverx.dealerstat.entity.Confirmation;
 import com.leverx.dealerstat.entity.Role;
 import com.leverx.dealerstat.entity.User;
@@ -13,7 +12,6 @@ import com.leverx.dealerstat.repository.ConfirmationRepository;
 import com.leverx.dealerstat.repository.UserRepository;
 import com.leverx.dealerstat.security.JwtTokenProvider;
 import com.leverx.dealerstat.service.AuthorizationService;
-import com.leverx.dealerstat.service.ConfirmationService;
 import com.leverx.dealerstat.service.MailSenderService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -71,7 +69,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         String code = UUID.randomUUID().toString();
         LocalDate expirationTime = LocalDate.now().plusDays(1);
 
-        Confirmation confirmation = new Confirmation(code, expirationTime, user);
+        Confirmation confirmation = new Confirmation();
+        confirmation.setCode(code);
+        confirmation.setUser(user);
+        confirmation.setExpirationTime(expirationTime);
 //    public void sendMessage(String subject, String email, String code) {
         String subject = "Code to recover password";
         senderService.sendMessage(subject, email, code);
@@ -124,7 +125,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
         String code = UUID.randomUUID().toString();
         LocalDate expirationTime = LocalDate.now().plusDays(1);
-        Confirmation confirmation = new Confirmation(code, expirationTime, user);
+        Confirmation confirmation = new Confirmation();
+        confirmation.setCode(code);
+        confirmation.setUser(user);
+        confirmation.setExpirationTime(expirationTime);
         user.setConfirmation(confirmation);
         // may be no?
         String subject = "Please confirm your account";

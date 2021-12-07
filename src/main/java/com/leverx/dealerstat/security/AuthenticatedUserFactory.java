@@ -1,6 +1,5 @@
 package com.leverx.dealerstat.security;
 
-import com.leverx.dealerstat.converter.UserConverter;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

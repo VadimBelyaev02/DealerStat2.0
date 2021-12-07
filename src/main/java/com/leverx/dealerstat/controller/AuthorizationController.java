@@ -1,6 +1,5 @@
 package com.leverx.dealerstat.controller;
 
-import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.model.AuthenticationRequestDTO;
 import com.leverx.dealerstat.model.RegistrationRequestDTO;
 import com.leverx.dealerstat.model.ResetPasswordRequestDTO;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthorizationController {
 
     private final AuthorizationService authorizationService;
