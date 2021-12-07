@@ -8,11 +8,9 @@ import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Comment;
-import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.repository.CommentRepository;
 import com.leverx.dealerstat.security.AuthenticatedUserFactory;
 import com.leverx.dealerstat.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,16 +25,16 @@ public class CommentServiceImpl implements CommentService {
     private final UserConverter userConverter;
     private final AuthenticatedUserFactory userFactory;
 
-    @Autowired
-    public CommentServiceImpl(CommentRepository repository,
+    public CommentServiceImpl(CommentRepository commentRepository,
                               CommentConverter commentConverter,
                               UserConverter userConverter,
                               AuthenticatedUserFactory userFactory) {
-        this.commentConverter = repository;
+        this.commentRepository = commentRepository;
         this.commentConverter = commentConverter;
         this.userConverter = userConverter;
         this.userFactory = userFactory;
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -60,6 +58,10 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Long commentId) {
         if (!commentRepository.existsById(commentId)) {
             throw new NotFoundException("Comment is not found");
+        }
+        Long userId = userFactory.currentUser().getId();
+        if (!commentRepository.getById(commentId).getAuthor().getId().equals(userId)) {
+            throw new AccessDeniedException("It's not your comment!");
         }
         commentRepository.deleteById(commentId);
     }
@@ -90,6 +92,9 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(readOnly = true)
     public Double calculateRating(Long userId) {
         List<Comment> comments = commentRepository.findAllByUserId(userId);
+        if (comments.size() == 0) {
+            throw new NotFoundException("No one comment was found");
+        }
         return (comments.stream().map(Comment::getRate).reduce(0D, Double::sum))
                 / (long) comments.size();
     }
@@ -115,6 +120,7 @@ public class CommentServiceImpl implements CommentService {
 //            entry.setValue(entry.getValue() / countOfRates.get(entry.getKey()));
 //        }
 //        return rating;
+        return null;
     }
 
     @Override

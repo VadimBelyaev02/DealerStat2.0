@@ -30,6 +30,4 @@ public interface CommentService {
     CommentDTO updateComment(CommentDTO comment);
 
     List<CommentDTO> getUnapprovedComments();
-
-    CommentDTO approveComment(CommentDTO comment);
 }

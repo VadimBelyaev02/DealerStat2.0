@@ -14,7 +14,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "confirmations")
-public class Confirmation extends BaseEntity{
+public class Confirmation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "hash_code")
     private String code;
