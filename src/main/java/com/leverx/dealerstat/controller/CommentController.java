@@ -37,11 +37,6 @@ public class CommentController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteComment(@PathVariable("id") Long commentId) {
-        Long userId = userFactory.currentUser().getId();
-
-        if (!commentService.getAuthor(commentId).getId().equals(userId)) {
-            throw new AccessDeniedException("It's not your comment!");
-        }
         commentService.deleteComment(commentId);
     }
 

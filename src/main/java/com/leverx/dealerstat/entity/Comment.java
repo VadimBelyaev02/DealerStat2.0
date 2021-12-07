@@ -15,7 +15,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "comments")
-public class Comment extends BaseEntity {
+public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "message")
     private String message;
@@ -39,6 +43,14 @@ public class Comment extends BaseEntity {
     @Max(5)
     @Column(name = "rate")
     private Double rate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getMessage() {
         return message;
