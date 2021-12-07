@@ -31,8 +31,7 @@ public class GameObjectController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public GameObjectDTO updateGameObject(@RequestBody GameObjectDTO gameObject) {
-        gameObjectService.update(gameObjectConverter.convertToModel(gameObject), id);
-        return null;
+        return gameObjectService.update(gameObject);
     }
 
     @GetMapping("/{id}")

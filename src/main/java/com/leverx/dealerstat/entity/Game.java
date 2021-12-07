@@ -12,7 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "games")
-public class Game extends BaseEntity{
+public class Game {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "name")
     private String name;

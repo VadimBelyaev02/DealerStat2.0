@@ -17,5 +17,6 @@ public interface GameObjectService {
 
     GameObjectDTO update(GameObjectDTO gameObject);
 
+    void delete(Long id);
 
 }

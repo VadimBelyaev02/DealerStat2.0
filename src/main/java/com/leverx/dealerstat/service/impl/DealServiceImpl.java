@@ -5,11 +5,9 @@ import com.leverx.dealerstat.dto.DealDTO;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Deal;
-import com.leverx.dealerstat.entity.GameObject;
 import com.leverx.dealerstat.repository.DealRepository;
 import com.leverx.dealerstat.service.DealService;
 import com.leverx.dealerstat.service.GameObjectService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +18,11 @@ import java.util.stream.Collectors;
 public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
-    private final GameObjectService gameObjectService;
     private final DealConverter dealConverter;
 
-    @Autowired
-    public DealServiceImpl(DealRepository repository, GameObjectService gameObjectService) {
-        this.repository = repository;
-        this.gameObjectService = gameObjectService;
+    public DealServiceImpl(DealRepository dealRepository, DealConverter dealConverter) {
+        this.dealRepository = dealRepository;
+        this.dealConverter = dealConverter;
     }
 
     @Override
@@ -52,7 +48,7 @@ public class DealServiceImpl implements DealService {
         if (dealRepository.existsById(deal.getId())) {
             throw new AlreadyExistsException("Deal is not found");
         }
-        return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(deal));
+        return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(deal)));
         //    GameObject gameObject = gameObjectService.findById(deal.getGameObject().getId());
         //    gameObject.setAuthor(deal.getToUser());
         //    gameObjectService.save(gameObject);

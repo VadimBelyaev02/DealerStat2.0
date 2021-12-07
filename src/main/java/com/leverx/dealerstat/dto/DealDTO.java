@@ -12,7 +12,7 @@ public class DealDTO {
 
     private Long id;
     private Date date;
-    private Long fromId;
-    private Long toId;
-    private Long objectId;
+    private UserDTO from;
+    private UserDTO to;
+    private GameObjectDTO object;
 }
