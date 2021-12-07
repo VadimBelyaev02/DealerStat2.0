@@ -1,5 +1,8 @@
 package com.leverx.dealerstat.service.impl;
 
+import com.leverx.dealerstat.converter.DealConverter;
+import com.leverx.dealerstat.dto.DealDTO;
+import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Deal;
 import com.leverx.dealerstat.entity.GameObject;
@@ -11,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DealServiceImpl implements DealService {
 
-    private final DealRepository repository;
+    private final DealRepository dealRepository;
     private final GameObjectService gameObjectService;
+    private final DealConverter dealConverter;
 
     @Autowired
     public DealServiceImpl(DealRepository repository, GameObjectService gameObjectService) {
@@ -26,24 +31,46 @@ public class DealServiceImpl implements DealService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Deal> findAll() {
-        return repository.findAll();
+    public List<DealDTO> findAll() {
+        return dealRepository.findAll().stream()
+                .map(dealConverter::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Deal findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> {
+    public DealDTO findById(Long id) {
+        Deal deal = dealRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("The deal is not found");
         });
+        return dealConverter.convertToDTO(deal);
     }
 
     @Override
-    public void save(Deal deal) {
-        repository.save(deal);
-        GameObject gameObject = gameObjectService.findById(deal.getGameObject().getId());
-        gameObject.setAuthor(deal.getToUser());
-        gameObjectService.save(gameObject);
+    @Transactional
+    public DealDTO save(DealDTO deal) {
+        if (dealRepository.existsById(deal.getId())) {
+            throw new AlreadyExistsException("Deal is not found");
+        }
+        return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(deal));
+        //    GameObject gameObject = gameObjectService.findById(deal.getGameObject().getId());
+        //    gameObject.setAuthor(deal.getToUser());
+        //    gameObjectService.save(gameObject);
 
+    }
+
+    @Override
+    @Transactional
+    public DealDTO update(DealDTO dealDTO) {
+        Deal deal = dealRepository.findById(dealDTO.getId()).orElseThrow(() -> {
+            throw new NotFoundException("Deal is not found");
+        });
+        return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(dealDTO)));
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        dealRepository.deleteById(id);
     }
 }

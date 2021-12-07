@@ -16,13 +16,10 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final AuthenticatedUserFactory userFactory;
 
     @Autowired
-    public CommentController(CommentService commentService,
-                             AuthenticatedUserFactory userFactory) {
+    public CommentController(CommentService commentService) {
         this.commentService = commentService;
-        this.userFactory = userFactory;
     }
 
     @GetMapping("/{id}")
@@ -34,11 +31,6 @@ public class CommentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDTO addComment(@RequestBody CommentDTO commentDTO) {
-        UserDTO author = userFactory.currentUser();
-        if (commentDTO.getUserId().equals(author.getId())) {
-            throw new AccessDeniedException("You can't comment youself!");
-        }
-        commentDTO.setAuthorId(author.getId());
         return commentService.save(commentDTO);
     }
 
@@ -56,11 +48,6 @@ public class CommentController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public CommentDTO updateComment(@RequestBody CommentDTO commentDTO) {
-        Long userId = userFactory.currentUser().getId();
-        if (!commentService.getAuthor(commentDTO.getId()).getId().equals(userId)) {
-            throw new AccessDeniedException("It's not your comment!");
-        }
-        commentDTO.setAuthorId(userId);
         return commentService.updateComment(commentDTO);
 
     }
@@ -71,9 +58,4 @@ public class CommentController {
         return commentService.getUnapprovedComments();
     }
 
-    @PutMapping("/approve")
-    @ResponseStatus(HttpStatus.OK)
-    public CommentDTO approveComment(@RequestBody CommentDTO commentDTO) {
-        return commentService.approveComment(commentDTO);
-    }
 }

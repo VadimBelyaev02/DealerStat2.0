@@ -47,6 +47,6 @@ public class DealController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteDeal(@PathVariable("id") Long id) {
-        dealService.delete();
+        dealService.delete(id);
     }
 }

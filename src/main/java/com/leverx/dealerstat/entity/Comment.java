@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Builder
@@ -19,7 +20,7 @@ public class Comment extends BaseEntity {
     @Column(name = "message")
     private String message;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -29,7 +30,7 @@ public class Comment extends BaseEntity {
 
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
-    private Date creatingDate;
+    private LocalDate creatingDate;
 
     @Column(name = "approved")
     private Boolean approved;
@@ -63,11 +64,11 @@ public class Comment extends BaseEntity {
         this.author = author;
     }
 
-    public Date getCreatingDate() {
+    public LocalDate getCreatingDate() {
         return creatingDate;
     }
 
-    public void setCreatingDate(Date creatingDate) {
+    public void setCreatingDate(LocalDate creatingDate) {
         this.creatingDate = creatingDate;
     }
 

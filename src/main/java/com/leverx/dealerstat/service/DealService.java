@@ -15,5 +15,5 @@ public interface DealService {
 
     DealDTO update(DealDTO dealDTO);
 
-    void delete();
+    void delete(Long id);
 }
