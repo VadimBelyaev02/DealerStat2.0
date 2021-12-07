@@ -1,60 +1,71 @@
 package com.leverx.dealerstat.service.impl;
 
+import com.leverx.dealerstat.converter.GameObjectConverter;
+import com.leverx.dealerstat.dto.GameObjectDTO;
+import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.exception.NotFoundException;
-import com.leverx.dealerstat.model.GameObject;
-import com.leverx.dealerstat.repository.GameObjectsRepository;
+import com.leverx.dealerstat.entity.GameObject;
+import com.leverx.dealerstat.repository.GameObjectRepository;
+import com.leverx.dealerstat.security.AuthenticatedUserFactory;
 import com.leverx.dealerstat.service.GameObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GameObjectServiceImpl implements GameObjectService {
 
-    private final GameObjectsRepository repository;
-
-    @Autowired
-    public GameObjectServiceImpl(GameObjectsRepository repository) {
-        this.repository = repository;
-    }
+    private final GameObjectConverter gameObjectConverter;
+    private final GameObjectRepository gameObjectRepository;
+    private final AuthenticatedUserFactory userFactory;
 
     @Override
     @Transactional(readOnly = true)
-    public GameObject findById(Long gameObjectId) {
-        return repository.findById(gameObjectId).orElseThrow(() -> {
+    public GameObjectDTO findById(Long gameObjectId) {
+        GameObject gameObject = gameObjectRepository.findById(gameObjectId).orElseThrow(() -> {
             throw new NotFoundException("Game object is not found");
         });
+        return gameObjectConverter.convertToDTO(gameObject);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<GameObject> findAll() {
-        return repository.findAll();
+    public List<GameObjectDTO> findAll() {
+        return gameObjectRepository.findAll().stream()
+                .map(gameObjectConverter::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void save(GameObject gameObject) {
-        repository.save(gameObject);
+    public GameObjectDTO save(GameObjectDTO gameObject) {
+        return gameObjectConverter.convertToDTO(gameObjectRepository.save(gameObjectConverter.convertToModel(gameObject));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<GameObject> findAllByAuthorId(Long id) {
-        return repository.findAllByAuthorId(id);
+    public List<GameObjectDTO> findAllByAuthorId(Long id) {
+        return gameObjectRepository.findAllByAuthorId(id).stream()
+                .map(gameObjectConverter::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void update(GameObject gameObject, Long id) {
-        if (!repository.existsById(id)) {
+    public GameObjectDTO update(GameObjectDTO gameObject) {
+        UserDTO user = userFactory.currentUser();
+        if (!gameObjectRepository.existsById(gameObject.getId())) {
             throw new NotFoundException("Game object is not found");
         }
-        gameObject.setId(id);
-        repository.save(gameObject);
+        if (!gameObjectRepository.findById(gameObject.getId()).getAuthor().getId().equals(user.getId())) {
+            return ResponseEntity.notFound().build();
+        }
+      //  repository.save(gameObject);
+        // save?
     }
 
 
