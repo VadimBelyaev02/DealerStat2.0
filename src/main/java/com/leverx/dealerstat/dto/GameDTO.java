@@ -1,17 +1,13 @@
 package com.leverx.dealerstat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameDTO {
+public class GameDTO extends BaseDTO {
 
-    private Long id;
     private String name;
-
 }

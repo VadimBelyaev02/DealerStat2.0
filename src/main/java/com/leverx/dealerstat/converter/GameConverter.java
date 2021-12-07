@@ -1,11 +1,11 @@
 package com.leverx.dealerstat.converter;
 
 import com.leverx.dealerstat.dto.GameDTO;
-import com.leverx.dealerstat.model.Game;
+import com.leverx.dealerstat.entity.Game;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GamesConverter {
+public class GameConverter {
 
     public GameDTO convertToDTO(final Game game) {
         return null;

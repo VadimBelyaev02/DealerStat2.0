@@ -1,19 +1,21 @@
 package com.leverx.dealerstat.service;
 
-import com.leverx.dealerstat.model.GameObject;
+import com.leverx.dealerstat.dto.GameObjectDTO;
+import com.leverx.dealerstat.entity.GameObject;
 
 import java.util.List;
 
 public interface GameObjectService {
-    GameObject findById(Long gameObjectId);
 
-    List<GameObject> findAll();
+    GameObjectDTO findById(Long gameObjectId);
 
-    void save(GameObject gameObject);
+    List<GameObjectDTO> findAll();
 
-    List<GameObject> findAllByAuthorId(Long id);
+    GameObjectDTO save(GameObjectDTO gameObject);
 
-    void update(GameObject gameObject, Long id);
+    List<GameObjectDTO> findAllByAuthorId(Long id);
+
+    GameObjectDTO update(GameObjectDTO gameObject);
 
 
 }
