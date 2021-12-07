@@ -1,6 +1,6 @@
 package com.leverx.dealerstat.config;
 
-import com.leverx.dealerstat.model.Permission;
+import com.leverx.dealerstat.entity.Permission;
 import com.leverx.dealerstat.security.JwtConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,37 +34,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/users").hasAuthority(Permission.READ.getPermission())
-                .antMatchers(HttpMethod.GET, "/auth/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/games").permitAll()
-                .antMatchers(HttpMethod.GET, "/comments/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/{id}/comments").permitAll()
-                .antMatchers(HttpMethod.GET, "/objects/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/comments").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/comments/{commentId}").authenticated()
-                .antMatchers(HttpMethod.PUT, "/comments/{id}").authenticated()
-                .antMatchers(HttpMethod.GET, "/rating/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/objects").hasAuthority(Permission.TRADE.getPermission())
-                .antMatchers(HttpMethod.PUT, "/objects/{id}").hasAuthority(Permission.TRADE.getPermission())
-                .antMatchers(HttpMethod.PUT, "/games/{id}").hasAuthority(Permission.WRITE.getPermission())
-                .antMatchers(HttpMethod.POST, "/games").hasAuthority(Permission.WRITE.getPermission())
-                .antMatchers(HttpMethod.PUT, "/become_trader").authenticated()
-                .antMatchers(HttpMethod.GET, "/comments/unapproved").hasAuthority(Permission.WRITE.getPermission())
-                .antMatchers(HttpMethod.POST, "/comments/approve").hasAuthority(Permission.WRITE.getPermission())
+                .antMatchers(HttpMethod.GET, "/api/*").hasAuthority(Permission.READ.getPermission())
+
+                .antMatchers(HttpMethod.DELETE, "/api/objects/*").hasAuthority(Permission.TRADE.getPermission())
+                .antMatchers(HttpMethod.POST, "/api/objects/*").hasAuthority(Permission.TRADE.getPermission())
+                .antMatchers(HttpMethod.PUT, "/api/objects/*").hasAuthority(Permission.TRADE.getPermission())
+
+                .antMatchers(HttpMethod.POST, "/api/deals/*").hasAuthority(Permission.READ.getPermission())
+                .antMatchers(HttpMethod.PUT, "/api/deals/*").hasAuthority(Permission.UPDATE.getPermission())
+                .antMatchers(HttpMethod.DELETE, "/api/deals/*").hasAuthority(Permission.DELETE.getPermission())
+
+                .antMatchers(HttpMethod.POST, "/api/games/*").hasAuthority(Permission.WRITE.getPermission())
+                .antMatchers(HttpMethod.PUT, "/api/games/*").hasAuthority(Permission.UPDATE.getPermission())
+                .antMatchers(HttpMethod.DELETE, "/api/games/*").hasAuthority(Permission.DELETE.getPermission())
+
+                .antMatchers(HttpMethod.POST, "/api/comments/*").hasAuthority(Permission.READ.getPermission())
+                .antMatchers(HttpMethod.PUT, "/api/comments/*").hasAuthority(Permission.READ.getPermission())
+                // approve?
+                .antMatchers(HttpMethod.DELETE, "/api/comments/*").hasAuthority(Permission.READ.getPermission())
+
+                .antMatchers(HttpMethod.PUT, "/api/users/*").hasAuthority(Permission.READ.getPermission())
+                .antMatchers(HttpMethod.DELETE, "/api/users/*").hasAuthority(Permission.READ.getPermission())
+
+                .antMatchers(HttpMethod.PUT, "/api/auth/*").hasAuthority(Permission.READ.getPermission())
+                .antMatchers(HttpMethod.POST, "/api/auth/*").hasAuthority(Permission.READ.getPermission())
+
                 .anyRequest()
                 .authenticated()
                 .and()
-                .apply(jwtConfigurer)
-                .and()
-                .logout()
-          //      .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID");
-                //.logoutSuccessUrl("/login");
+                .apply(jwtConfigurer);
+//                .and()
+//                .logout()
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .deleteCookies("JSESSIONID");
+//                .and()
+//                .exceptionHandling().accessDeniedHandler(as)
+//                .logoutSuccessUrl("/login");
     }
 
     @Bean

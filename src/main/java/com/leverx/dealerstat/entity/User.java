@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "public")
 public class User {
 
     @Id
@@ -35,7 +35,7 @@ public class User {
     private String email;
 
     @Column(name = "created_at")
-    @Temporal(TemporalType.DATE)
+ //   @Temporal(TemporalType.DATE)
     private LocalDate creatingDate;
 
     @Enumerated(value = EnumType.STRING)
@@ -58,7 +58,7 @@ public class User {
     private List<Deal> dealsTo;
 
     @Column(name = "confirmed")
-    private boolean isConfirmed;
+    private boolean confirmed;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -152,11 +152,11 @@ public class User {
     }
 
     public boolean isConfirmed() {
-        return isConfirmed;
+        return confirmed;
     }
 
     public void setConfirmed(boolean confirmed) {
-        isConfirmed = confirmed;
+        this.confirmed = confirmed;
     }
 
     public List<GameObject> getGameObjects() {
