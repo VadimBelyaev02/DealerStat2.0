@@ -4,13 +4,13 @@ import lombok.*;
 
 import java.util.Date;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DealDTO extends BaseDTO{
+public class DealDTO {
 
+    private Long id;
     private Date date;
     private Long fromId;
     private Long toId;

@@ -4,16 +4,16 @@ import lombok.*;
 
 import java.util.Date;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
-public class CommentDTO extends BaseDTO {
+public class CommentDTO {
 
+    private Long id;
     private String message;
     private Double rate;
     private Long userId;
     private Long authorId;
     private Date createdAt;
+    private boolean approved;
 }
