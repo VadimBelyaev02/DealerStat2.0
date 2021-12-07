@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -31,25 +32,25 @@ public class User extends BaseEntity {
 
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
-    private Date creatingDate;
+    private LocalDate creatingDate;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
     private Role role;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> authorsComments;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GameObject> gameObjects;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Confirmation confirmation;
 
-    @OneToMany(mappedBy = "fromUser")
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Deal> dealsFrom;
 
-    @OneToMany(mappedBy = "toUser")
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Deal> dealsTo;
 
     @Column(name = "confirmed")
@@ -90,12 +91,36 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public Date getCreatingDate() {
+    public LocalDate getCreatingDate() {
         return creatingDate;
     }
 
-    public void setCreatingDate(Date creatingDate) {
+    public void setCreatingDate(LocalDate creatingDate) {
         this.creatingDate = creatingDate;
+    }
+
+    public List<Comment> getAuthorsComments() {
+        return authorsComments;
+    }
+
+    public void setAuthorsComments(List<Comment> authorsComments) {
+        this.authorsComments = authorsComments;
+    }
+
+    public List<Deal> getDealsFrom() {
+        return dealsFrom;
+    }
+
+    public void setDealsFrom(List<Deal> dealsFrom) {
+        this.dealsFrom = dealsFrom;
+    }
+
+    public List<Deal> getDealsTo() {
+        return dealsTo;
+    }
+
+    public void setDealsTo(List<Deal> dealsTo) {
+        this.dealsTo = dealsTo;
     }
 
     public Role getRole() {

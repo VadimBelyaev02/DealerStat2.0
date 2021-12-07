@@ -1,23 +1,20 @@
 package com.leverx.dealerstat.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.leverx.dealerstat.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.leverx.dealerstat.entity.Role;
+import lombok.*;
 
-import java.util.Date;
-
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserDTO extends BaseDTO {
 
     private String firstName;
     private String lastName;
-  //  @JsonIgnore
+    @JsonIgnore
     private String password;
     private String email;
+    private Role role;
 }
