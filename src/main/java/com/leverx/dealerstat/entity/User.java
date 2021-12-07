@@ -30,7 +30,6 @@ public class User {
     @Column(name = "hash_password")
     private String password;
 
-    @Email(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
     @Column(name = "email")
     private String email;
 

@@ -1,6 +1,6 @@
 package com.leverx.dealerstat.security;
 
-import com.leverx.dealerstat.model.User;
+import com.leverx.dealerstat.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
