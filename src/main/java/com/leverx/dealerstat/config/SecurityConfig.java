@@ -53,8 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // approve?
                 .antMatchers(HttpMethod.DELETE, "/api/comments/*").hasAuthority(Permission.READ.getPermission())
 
-                .antMatchers(HttpMethod.PUT, "/api/users/*").hasAuthority(Permission.READ.getPermission())
-                .antMatchers(HttpMethod.DELETE, "/api/users/*").hasAuthority(Permission.READ.getPermission())
+                .antMatchers(HttpMethod.PUT, "/api/users/*").hasAuthority(Permission.UPDATE.getPermission())
+                .antMatchers(HttpMethod.DELETE, "/api/users/*").hasAuthority(Permission.DELETE.getPermission())
 
                 .antMatchers(HttpMethod.PUT, "/api/auth/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/*").permitAll()
@@ -63,15 +63,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .apply(jwtConfigurer);
-//                .and()
-//                .logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
-//                .invalidateHttpSession(true)
-//                .clearAuthentication(true)
-//                .deleteCookies("JSESSIONID");
-//                .and()
-//                .exceptionHandling().accessDeniedHandler(as)
-//                .logoutSuccessUrl("/login");
     }
 
     @Bean
