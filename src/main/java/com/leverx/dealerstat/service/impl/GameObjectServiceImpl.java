@@ -34,7 +34,7 @@ public class GameObjectServiceImpl implements GameObjectService {
 
     @Override
     @Transactional(readOnly = true)
-    public GameObjectDTO findById(Long gameObjectId) {
+    public GameObjectDTO getById(Long gameObjectId) {
         GameObject gameObject = gameObjectRepository.findById(gameObjectId).orElseThrow(() -> {
             throw new NotFoundException("Game object is not found");
         });
@@ -43,7 +43,7 @@ public class GameObjectServiceImpl implements GameObjectService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GameObjectDTO> findAll() {
+    public List<GameObjectDTO> getAll() {
         return gameObjectRepository.findAll().stream()
                 .map(gameObjectConverter::convertToDTO)
                 .collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class GameObjectServiceImpl implements GameObjectService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GameObjectDTO> findAllByCurrentUser() {
+    public List<GameObjectDTO> getAllByCurrentUser() {
         UserDTO user = userFactory.currentUser();
         return gameObjectRepository.findAllByAuthorId(user.getId()).stream()
                 .map(gameObjectConverter::convertToDTO)

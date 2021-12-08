@@ -26,20 +26,19 @@ public class DealController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<DealDTO> getAllDeals() {
-        return dealService.findAll();
+        return dealService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DealDTO getDeal(@PathVariable("id") Long id) {
-        return dealService.findById(id);
+        return dealService.getById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DealDTO addDeal(@RequestBody @Valid DealDTO dealDTO, BindingResult result) {
         if (result.hasErrors()) {
-            result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
         return dealService.save(dealDTO);
@@ -49,7 +48,6 @@ public class DealController {
     @ResponseStatus(HttpStatus.OK)
     public DealDTO updateDeal(@RequestBody @Valid DealDTO dealDTO, BindingResult result) {
         if (result.hasErrors()) {
-            result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
         return dealService.update(dealDTO);

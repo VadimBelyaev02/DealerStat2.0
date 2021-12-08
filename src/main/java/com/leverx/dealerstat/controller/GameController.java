@@ -23,20 +23,19 @@ public class GameController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public GameDTO findById(@PathVariable("id") Long id) {
-        return gameService.findById(id);
+        return gameService.getById(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<GameDTO> getAllGames() {
-        return gameService.findAll();
+        return gameService.getAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameDTO addGame(@RequestBody @Valid GameDTO gameDTO, BindingResult result) {
         if (result.hasErrors()) {
-            result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
         return gameService.save(gameDTO);
@@ -46,7 +45,6 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     public GameDTO updateGame(@RequestBody @Valid GameDTO gameDTO, BindingResult result) {
         if (result.hasErrors()) {
-            result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
         return gameService.update(gameDTO);

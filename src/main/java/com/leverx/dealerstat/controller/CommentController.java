@@ -56,7 +56,6 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     public CommentDTO updateComment(@RequestBody @Valid CommentDTO commentDTO, BindingResult result) {
         if (result.hasErrors()) {
-            result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
         return commentService.update(commentDTO);

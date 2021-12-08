@@ -27,6 +27,9 @@ public class GameObjectController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public GameObjectDTO updateGameObject(@RequestBody @Valid GameObjectDTO gameObject, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return gameObjectService.update(gameObject);
     }
 
@@ -40,7 +43,6 @@ public class GameObjectController {
     @ResponseStatus(HttpStatus.CREATED)
     public GameObjectDTO addGameObject(@RequestBody @Valid GameObjectDTO gameObject, BindingResult result) {
         if (result.hasErrors()) {
-            result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
         return gameObjectService.save(gameObject);
