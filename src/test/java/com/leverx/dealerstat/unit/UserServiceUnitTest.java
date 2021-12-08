@@ -7,10 +7,7 @@ import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.repository.UserRepository;
 import com.leverx.dealerstat.service.impl.UserServiceImpl;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,7 +35,7 @@ public class UserServiceUnitTest {
     private UserRepository userRepository;
 
     @Test
-    public void Given_ServiceTriesToFindUser_When_GetUserId_Then_FOundUserIsReturned() {
+    public void Given_ServiceTriesToFindUser_When_GetUserId_Then_FoundUserIsReturned() {
         Long id = 1L;
         String email = "vadimbelaev002@gmail.com";
         User user = new User();
@@ -127,16 +124,30 @@ public class UserServiceUnitTest {
 
     @Test
     public void Given_ServiceTriesToDeleteUserById_When_GetUserId_Then_DeleteUser() {
-        String email = "vadimbelaev002@gmail.com";
+        Long id = 1L;
         UserDTO userDTO = new UserDTO();
         User user = new User();
 
-        Mockito.when(userRepository.existsByEmail(email)).thenReturn(false);
+        Mockito.when(userRepository.existsById(id)).thenReturn(true);
+   //     Mockito.doAnswer(invocationOnMock -> null).when(userRepository).deleteById(id);
 
-        assertThrows(NotFoundException.class, () -> userService.update(userDTO));
+        //Assertions.assert
 
-        Mockito.verify(userRepository, Mockito.times(1)).existsByEmail(email);
         Mockito.verify(userConverter, Mockito.never()).convertToDTO(user);
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(id);
+        Mockito.verify(userRepository, Mockito.times(1)).existsById(id);
+    }
+
+    @Test
+    public void Given_ServiceTriesToDeleteUserById_When_UserIsNotFound_Then_ThrowException() {
+        Long id = 1L;
+
+        Mockito.when(userRepository.existsById(id)).thenReturn(false);
+
+        assertThrows(NotFoundException.class, () -> userService.delete(id));
+
+        Mockito.verify(userRepository, Mockito.times(1)).existsById(id);
+        Mockito.verify(userRepository, Mockito.never()).deleteById(id);
     }
 
 }
