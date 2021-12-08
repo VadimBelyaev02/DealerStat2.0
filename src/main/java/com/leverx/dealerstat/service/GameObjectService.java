@@ -13,7 +13,7 @@ public interface GameObjectService {
 
     GameObjectDTO save(GameObjectDTO gameObject);
 
-    List<GameObjectDTO> findAllByAuthorId(Long id);
+    List<GameObjectDTO> findAllByCurrentUser();
 
     GameObjectDTO update(GameObjectDTO gameObject);
 

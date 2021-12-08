@@ -1,6 +1,7 @@
 package com.leverx.dealerstat.controller;
 
 import com.leverx.dealerstat.dto.GameDTO;
+import com.leverx.dealerstat.exception.NotValidException;
 import com.leverx.dealerstat.service.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -34,12 +35,20 @@ public class GameController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameDTO addGame(@RequestBody @Valid GameDTO gameDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getFieldError();
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return gameService.save(gameDTO);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public GameDTO updateGame(@RequestBody @Valid GameDTO gameDTO, BindingResult result){
+    public GameDTO updateGame(@RequestBody @Valid GameDTO gameDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getFieldError();
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return gameService.update(gameDTO);
     }
 

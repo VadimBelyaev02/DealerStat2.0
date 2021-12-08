@@ -2,6 +2,7 @@ package com.leverx.dealerstat.controller;
 
 import com.leverx.dealerstat.dto.GameObjectDTO;
 import com.leverx.dealerstat.dto.UserDTO;
+import com.leverx.dealerstat.exception.NotValidException;
 import com.leverx.dealerstat.security.AuthenticatedUserFactory;
 import com.leverx.dealerstat.service.GameObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,10 @@ public class GameObjectController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameObjectDTO addGameObject(@RequestBody @Valid GameObjectDTO gameObject, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getFieldError();
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return gameObjectService.save(gameObject);
     }
 
@@ -50,10 +55,7 @@ public class GameObjectController {
     @GetMapping("/my")
     @ResponseStatus(HttpStatus.OK)
     public List<GameObjectDTO> getAuthorizedUserGameObjects() {
-  //     UserDTO user = userFactory.currentUser();
-         //  return gameObjectService.findAllByAuthorId(user.getId());
-    return null
-            ;
+        return gameObjectService.findAllByCurrentUser();
     }
 
 

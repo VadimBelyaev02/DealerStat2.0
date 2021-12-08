@@ -3,6 +3,7 @@ package com.leverx.dealerstat.service.impl;
 import com.leverx.dealerstat.dto.converter.GameObjectConverter;
 import com.leverx.dealerstat.dto.GameObjectDTO;
 import com.leverx.dealerstat.dto.UserDTO;
+import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
@@ -59,8 +60,9 @@ public class GameObjectServiceImpl implements GameObjectService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GameObjectDTO> findAllByAuthorId(Long id) {
-        return gameObjectRepository.findAllByAuthorId(id).stream()
+    public List<GameObjectDTO> findAllByCurrentUser() {
+        UserDTO user = userFactory.currentUser();
+        return gameObjectRepository.findAllByAuthorId(user.getId()).stream()
                 .map(gameObjectConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
