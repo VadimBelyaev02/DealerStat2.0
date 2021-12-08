@@ -61,7 +61,7 @@ public class AuthorizationController {
     public void register(@RequestBody @Valid RegistrationRequestDTO requestDTO, BindingResult result) {
         if (result.hasErrors()) {
             result.getFieldError();
-            throw new NotValidException(result.getFieldError().toString());
+            throw new NotValidException(result.getAllErrors().toString());
         }
         authorizationService.register(requestDTO);
     }
