@@ -3,8 +3,10 @@ package com.leverx.dealerstat.controller;
 import com.leverx.dealerstat.dto.GameDTO;
 import com.leverx.dealerstat.service.GameService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,13 +33,13 @@ public class GameController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GameDTO addGame(@RequestBody GameDTO gameDTO) {
+    public GameDTO addGame(@RequestBody @Valid GameDTO gameDTO, BindingResult result) {
         return gameService.save(gameDTO);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public GameDTO updateGame(@RequestBody GameDTO gameDTO){
+    public GameDTO updateGame(@RequestBody @Valid GameDTO gameDTO, BindingResult result){
         return gameService.update(gameDTO);
     }
 

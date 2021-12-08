@@ -6,8 +6,10 @@ import com.leverx.dealerstat.security.AuthenticatedUserFactory;
 import com.leverx.dealerstat.service.GameObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,18 +17,15 @@ import java.util.List;
 public class GameObjectController {
 
     private final GameObjectService gameObjectService;
-    private final AuthenticatedUserFactory userFactory;
 
     @Autowired
-    public GameObjectController(GameObjectService gameObjectService,
-                                AuthenticatedUserFactory userFactory) {
+    public GameObjectController(GameObjectService gameObjectService) {
         this.gameObjectService = gameObjectService;
-        this.userFactory = userFactory;
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public GameObjectDTO updateGameObject(@RequestBody GameObjectDTO gameObject) {
+    public GameObjectDTO updateGameObject(@RequestBody @Valid GameObjectDTO gameObject, BindingResult result) {
         return gameObjectService.update(gameObject);
     }
 
@@ -38,7 +37,7 @@ public class GameObjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GameObjectDTO addGameObject(@RequestBody GameObjectDTO gameObject) {
+    public GameObjectDTO addGameObject(@RequestBody @Valid GameObjectDTO gameObject, BindingResult result) {
         return gameObjectService.save(gameObject);
     }
 
@@ -51,8 +50,10 @@ public class GameObjectController {
     @GetMapping("/my")
     @ResponseStatus(HttpStatus.OK)
     public List<GameObjectDTO> getAuthorizedUserGameObjects() {
-       UserDTO user = userFactory.currentUser();
-       return gameObjectService.findAllByAuthorId(user.getId());
+  //     UserDTO user = userFactory.currentUser();
+         //  return gameObjectService.findAllByAuthorId(user.getId());
+    return null
+            ;
     }
 
 

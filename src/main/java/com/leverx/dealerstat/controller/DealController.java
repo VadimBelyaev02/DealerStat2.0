@@ -5,8 +5,10 @@ import com.leverx.dealerstat.service.DealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,13 +36,13 @@ public class DealController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DealDTO addDeal(@RequestBody DealDTO dealDTO) {
+    public DealDTO addDeal(@RequestBody @Valid DealDTO dealDTO, BindingResult result) {
         return dealService.save(dealDTO);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public DealDTO updateDeal(@RequestBody DealDTO dealDTO) {
+    public DealDTO updateDeal(@RequestBody @Valid DealDTO dealDTO, BindingResult result) {
         return dealService.update(dealDTO);
     }
 

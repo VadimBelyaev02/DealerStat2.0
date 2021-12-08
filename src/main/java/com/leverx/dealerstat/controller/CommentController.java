@@ -54,7 +54,7 @@ public class CommentController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public CommentDTO updateComment(@RequestBody CommentDTO commentDTO) {
+    public CommentDTO updateComment(@RequestBody @Valid CommentDTO commentDTO, BindingResult result) {
         return commentService.updateComment(commentDTO);
     }
 

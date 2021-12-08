@@ -1,12 +1,16 @@
 package com.leverx.dealerstat.controller;
 
+import com.leverx.dealerstat.exception.NotValidException;
 import com.leverx.dealerstat.model.AuthenticationRequestDTO;
 import com.leverx.dealerstat.model.RegistrationRequestDTO;
 import com.leverx.dealerstat.model.ResetPasswordRequestDTO;
 import com.leverx.dealerstat.service.AuthorizationService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -33,7 +37,7 @@ public class AuthorizationController {
 
     @PostMapping("/reset")
     @ResponseStatus(HttpStatus.OK)
-    public void resetPassword(@RequestBody ResetPasswordRequestDTO requestDTO) {
+    public void resetPassword(@RequestBody @Valid ResetPasswordRequestDTO requestDTO, BindingResult result) {
         authorizationService.resetPassword(requestDTO);
     }
 
@@ -45,13 +49,20 @@ public class AuthorizationController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, String> authenticate(@RequestBody AuthenticationRequestDTO requestDTO) {
+    public Map<String, String> authenticate(@RequestBody @Valid AuthenticationRequestDTO requestDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return authorizationService.authenticate(requestDTO);
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody RegistrationRequestDTO requestDTO) {
+    public void register(@RequestBody @Valid RegistrationRequestDTO requestDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getFieldError();
+            throw new NotValidException(result.getFieldError().toString());
+        }
         authorizationService.register(requestDTO);
     }
 }

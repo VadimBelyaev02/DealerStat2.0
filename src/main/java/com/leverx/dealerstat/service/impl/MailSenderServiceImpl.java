@@ -42,7 +42,7 @@ public class MailSenderServiceImpl implements MailSenderService {
             mimeMessage.setText(code);
             Transport.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new MessageSendingException("There was a exception during sending the message", e);
+            throw new MessageSendingException("There was an exception during sending a message", e);
         }
     }
 }
