@@ -91,13 +91,6 @@ public class UserServiceImpl implements UserService {
         return userConverter.convertToDTO(user);
     }
 
-//    @Override
-//    @Transactional
-//    public UserDTO becomeTrader(UserDTO user) {
-//        user.setRole(Role.TRADER);
-//        return repository.save(user);
-//    }
-
     @Override
     public UserDTO update(UserDTO userDTO) {
         if (!userRepository.existsByEmail(userDTO.getEmail())) {
