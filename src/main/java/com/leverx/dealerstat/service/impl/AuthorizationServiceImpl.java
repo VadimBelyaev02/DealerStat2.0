@@ -103,7 +103,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
             String token = tokenProvider.createToken(requestDTO.getEmail(), user.getRole().name());
             Map<String, String> response = new HashMap<>();
-            response.put("email", requestDTO.getEmail());
             response.put("token", token);
             return response;
         } catch (AuthenticationException e) {

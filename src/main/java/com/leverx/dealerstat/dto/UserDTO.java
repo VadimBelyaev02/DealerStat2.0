@@ -1,6 +1,9 @@
 package com.leverx.dealerstat.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.leverx.dealerstat.entity.Role;
 import lombok.*;
 
@@ -33,6 +36,7 @@ public class UserDTO {
     private String email;
 
     @NotBlank
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate createdAt;
 
     @NotBlank
