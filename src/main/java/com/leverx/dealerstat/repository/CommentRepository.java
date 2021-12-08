@@ -10,19 +10,10 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-   Optional<Comment> findById(Long id);
-
    List<Comment> findAllByAuthorId(Long id);
-
-   void deleteById(Long id);
 
    List<Comment>findAllByApproved(boolean approved);
 
    List<Comment> findAllByUserId(Long id);
-   //@Query(nativeQuery = true,
-    //       value = "SELECT user SUM(comments.rate) FROM comments JOIN users ON comments.user_id = users.id")// +
-                   //" group by comments.user_id order by comments.rate")
-  // Optional<Map<User, Double>> findTopByRate();
 
- //   Optional<List<Comment>> findAll();
 }

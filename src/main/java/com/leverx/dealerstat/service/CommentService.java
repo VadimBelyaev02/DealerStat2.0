@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    List<CommentDTO> getComments(Long userId);
+    List<CommentDTO> getUserComments(Long userId);
 
     CommentDTO getCommentById(Long commentId);
 
@@ -25,7 +25,7 @@ public interface CommentService {
 
     Map<UserDTO, Double> calculateAllRating();
 
-    List<CommentDTO> findAll();
+    List<CommentDTO> getAll();
 
     CommentDTO updateComment(CommentDTO comment);
 

@@ -4,6 +4,9 @@ import com.leverx.dealerstat.dto.converter.CommentConverter;
 import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.dto.CommentDTO;
 import com.leverx.dealerstat.dto.UserDTO;
+import com.leverx.dealerstat.entity.Permission;
+import com.leverx.dealerstat.entity.Role;
+import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
@@ -38,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentDTO> getComments(Long userId) {
+    public List<CommentDTO> getUserComments(Long userId) {
         return commentRepository.findAllByAuthorId(userId).stream()
                 .map(commentConverter::convertToDTO)
                 .collect(Collectors.toList());
@@ -59,8 +62,9 @@ public class CommentServiceImpl implements CommentService {
         if (!commentRepository.existsById(commentId)) {
             throw new NotFoundException("Comment is not found");
         }
-        Long userId = userFactory.currentUser().getId();
-        if (!commentRepository.getById(commentId).getAuthor().getId().equals(userId)) {
+        UserDTO user = userFactory.currentUser();
+        if (!commentRepository.getById(commentId).getAuthor().getId().equals(user.getId())
+                && !user.getRole().getPermissions().contains(Permission.DELETE)) {
             throw new AccessDeniedException("It's not your comment!");
         }
         commentRepository.deleteById(commentId);
@@ -74,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
         }
         UserDTO author = userFactory.currentUser();
         if (comment.getUserId().equals(author.getId())) {
-            throw new AccessDeniedException("You can't comment youself!");
+            throw new AccessDeniedException("You can't comment yourself!");
         }
         return commentConverter.convertToDTO(commentRepository.save(commentConverter.convertToModel(comment)));
     }
@@ -125,7 +129,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public List<CommentDTO> findAll() {
+    public List<CommentDTO> getAll() {
         return commentRepository.findAll().stream()
                 .map(commentConverter::convertToDTO)
                 .collect(Collectors.toList());
