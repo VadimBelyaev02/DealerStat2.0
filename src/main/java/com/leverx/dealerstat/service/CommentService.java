@@ -13,7 +13,7 @@ public interface CommentService {
 
     List<CommentDTO> getComments(Long userId);
 
-    CommentDTO getComment(Long commentId);
+    CommentDTO getCommentById(Long commentId);
 
     void deleteComment(Long commentId);
 

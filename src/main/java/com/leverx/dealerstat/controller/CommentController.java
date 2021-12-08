@@ -28,7 +28,7 @@ public class CommentController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CommentDTO getComment(@PathVariable("id") Long commentId) {
-        return commentService.getComment(commentId);
+        return commentService.getCommentById(commentId);
     }
 
     @GetMapping

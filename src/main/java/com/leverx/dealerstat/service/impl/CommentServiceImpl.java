@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public CommentDTO getComment(Long commentId) {
+    public CommentDTO getCommentById(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException("Comment is not found");
         });
