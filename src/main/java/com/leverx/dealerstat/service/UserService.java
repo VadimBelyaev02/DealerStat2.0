@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserDTO> findAll();
+    List<UserDTO> getAll();
 
-    UserDTO findById(Long id);
+    UserDTO getById(Long id);
 
-    UserDTO findByEmail(String email);
+    UserDTO getByEmail(String email);
 
     UserDTO update(UserDTO userDTO);
 

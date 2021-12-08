@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserDTO> findAll() {
+    public List<UserDTO> getAll() {
         return userRepository.findAll().stream()
                 .map(userConverter::convertToDTO)
                 .collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDTO findById(Long id) {
+    public UserDTO getById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("User is not found");
         });
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDTO findByEmail(String email) throws NotFoundException {
+    public UserDTO getByEmail(String email) throws NotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> {
             throw new UsernameNotFoundException("User doesn't exist");
         });

@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface GameService {
 
-    GameDTO findById(Long id);
+    GameDTO getById(Long id);
 
-    List<GameDTO> findAll();
+    List<GameDTO> getAll();
 
     GameDTO save(GameDTO convertToModel);
 

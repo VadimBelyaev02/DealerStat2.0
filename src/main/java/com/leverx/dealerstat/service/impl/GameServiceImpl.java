@@ -26,7 +26,7 @@ public class GameServiceImpl implements GameService {
 
 
     @Override
-    public GameDTO findById(Long id) {
+    public GameDTO getById(Long id) {
         Game game = gameRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("Game is not found");
         });
@@ -35,7 +35,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GameDTO> findAll() {
+    public List<GameDTO> getAll() {
         return gameRepository.findAll().stream()
                 .map(gameConverter::convertToDTO)
                 .collect(Collectors.toList());
