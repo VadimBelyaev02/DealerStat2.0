@@ -1,6 +1,7 @@
 package com.leverx.dealerstat.controller;
 
 import com.leverx.dealerstat.dto.DealDTO;
+import com.leverx.dealerstat.exception.NotValidException;
 import com.leverx.dealerstat.service.DealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,12 +38,20 @@ public class DealController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DealDTO addDeal(@RequestBody @Valid DealDTO dealDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getFieldError();
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return dealService.save(dealDTO);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public DealDTO updateDeal(@RequestBody @Valid DealDTO dealDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getFieldError();
+            throw new NotValidException(result.getAllErrors().toString());
+        }
         return dealService.update(dealDTO);
     }
 

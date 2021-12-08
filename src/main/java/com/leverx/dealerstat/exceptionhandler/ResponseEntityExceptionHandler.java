@@ -6,9 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 
 @RestControllerAdvice
 public class ResponseEntityExceptionHandler {
@@ -22,36 +20,36 @@ public class ResponseEntityExceptionHandler {
     @ExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e) {
         ExceptionInfo info = new ExceptionInfo(e.getMessage(), HttpStatus.FORBIDDEN.value());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(info, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({AlreadyExistsException.class})
     public ResponseEntity<?> handleAlreadyExistsException(AlreadyExistsException e) {
         ExceptionInfo info = new ExceptionInfo(e.getMessage(), HttpStatus.FORBIDDEN.value());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(info, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({JwtAuthenticationException.class, JwtException.class, UsernameNotFoundException.class})
     public ResponseEntity<?> handleJwtAuthenticationException(JwtAuthenticationException e) {
         ExceptionInfo info = new ExceptionInfo(e.getMessage(), HttpStatus.FORBIDDEN.value());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(info, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({MessageSendingException.class})
     public ResponseEntity<?> handleMessageSendingException(MessageSendingException e) {
         ExceptionInfo info = new ExceptionInfo(e.getMessage(), HttpStatus.FORBIDDEN.value());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<?> handleAuthenticationException(AuthenticationException e) {
         ExceptionInfo info = new ExceptionInfo(e.getMessage(), HttpStatus.FORBIDDEN.value());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(info, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({NotValidException.class})
     public ResponseEntity<?> handleNotValidatedException(NotValidException e) {
         ExceptionInfo info = new ExceptionInfo(e.getMessage(), HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
 }
