@@ -3,6 +3,7 @@ package com.leverx.dealerstat.unit;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.repository.UserRepository;
 import com.leverx.dealerstat.service.impl.UserServiceImpl;
@@ -37,7 +38,7 @@ public class UserServiceUnitTest {
     private UserRepository userRepository;
 
     @Test
-    public void Given_ServiceTriesToFindUser_When_GetUserId_Then_UserIsReturned() {
+    public void Given_ServiceTriesToFindUser_When_GetUserId_Then_FOundUserIsReturned() {
         Long id = 1L;
         String email = "vadimbelaev002@gmail.com";
         User user = new User();
@@ -58,55 +59,84 @@ public class UserServiceUnitTest {
     }
 
     @Test
-    public void Given_ServiceTriesToFindAllUsers_When_GetNoOneField_Then_UsersIsReturned() {
+    public void Given_ServiceTriesToFindAllUsers_When_GetNoOneField_Then_FoundUsersIsReturned() {
         List<User> users = new ArrayList<>();
-        users.add(new User());
+        List<UserDTO> userDTOS = new ArrayList<>();
+        User user = new User();
+        UserDTO userDTO = new UserDTO();
+        users.add(user);
+        users.add(user);
+
+        userDTOS.add(userDTO);
+        userDTOS.add(userDTO);
 
         Mockito.when(userRepository.findAll()).thenReturn(users);
+        Mockito.when(userConverter.convertToDTO(user)).thenReturn(userDTO);
 
-        assertNotNull(userService.findAll());
+        assertEquals(userService.findAll(), userDTOS);
+
+        Mockito.verify(userRepository, Mockito.times(1)).findAll();
+        Mockito.verify(userConverter, Mockito.times(2)).convertToDTO(user);
     }
 
     @Test
-    public void Given_ServiceTriesToFindUser_When_GetUserEmail_Then_UserIsReturned() {
+    public void Given_ServiceTriesToFindUser_When_GetUserEmail_Then_FoundUserIsReturned() {
         String email = "vadimbealev002@gmail.com";
         User user = new User();
+        UserDTO userDTO = new UserDTO();
         user.setEmail(email);
+        userDTO.setEmail(email);
 
         Mockito.when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        Mockito.when(userConverter.convertToDTO(user)).thenReturn(userDTO);
 
-        assertEquals(userService.findByEmail(email).getEmail(), user.getEmail());
+        assertEquals(userService.findByEmail(email), userDTO);
+
+        Mockito.verify(userRepository, Mockito.times(1)).findByEmail(email);
+        Mockito.verify(userConverter, Mockito.times(1)).convertToDTO(user);
     }
 
     @Test
-    public void Given_ServiceTriesToSaveUser_When_UserIsAlreadyExists_Then_ThrowException() {
-        String email = "vadimbelaev002@gmail.com";
+    public void Given_ServiceTriesToFindUserById_When_UserIsNotFound_Then_ThrowException() {
         User user = new User();
-        user.setEmail(email);
-        Mockito.when(userRepository.existsByEmail(email)).thenReturn(true);
-       // assertThrows(AlreadyExistsException.class, () -> usersService.save(user));
-    }
+        UserDTO userDTO = new UserDTO();
+        Long id = 2L;
+        userDTO.setId(id);
 
+        Mockito.when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-    @Test
-    public void Given_ServiceTriesToFindUser_When_UserIsNotFound_Then_ThrowException() {
-        User user = new User();
-        Long id = 1L;
-        user.setId(id);
+        assertThrows(NotFoundException.class, () -> userService.findById(id));
 
-        Mockito.when(userRepository.findById(2L)).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class, () -> userService.findById(2L));
+        Mockito.verify(userRepository, Mockito.times(1)).findById(id);
+        Mockito.verify(userConverter, Mockito.never()).convertToDTO(user);
     }
 
     @Test
     public void Given_ServiceTriesToUpdateUser_When_UserIsNotFound_Then_ThrowException() {
-        UserDTO user = new UserDTO();
-        Long id = 1L;
+        String email = "vadimbelaev002@gmail.com";
+        UserDTO userDTO = new UserDTO();
+        User user = new User();
 
-        Mockito.when(userRepository.findById(2L)).thenReturn(Optional.empty());
+        Mockito.when(userRepository.existsByEmail(email)).thenReturn(false);
 
-    //    assertThrows(NotFoundException.class, () -> usersService.update(2L));
+        assertThrows(NotFoundException.class, () -> userService.update(userDTO));
+
+        Mockito.verify(userRepository, Mockito.times(1)).existsByEmail(email);
+        Mockito.verify(userConverter, Mockito.never()).convertToDTO(user);
+    }
+
+    @Test
+    public void Given_ServiceTriesToDeleteUserById_When_GetUserId_Then_DeleteUser() {
+        String email = "vadimbelaev002@gmail.com";
+        UserDTO userDTO = new UserDTO();
+        User user = new User();
+
+        Mockito.when(userRepository.existsByEmail(email)).thenReturn(false);
+
+        assertThrows(NotFoundException.class, () -> userService.update(userDTO));
+
+        Mockito.verify(userRepository, Mockito.times(1)).existsByEmail(email);
+        Mockito.verify(userConverter, Mockito.never()).convertToDTO(user);
     }
 
 }
