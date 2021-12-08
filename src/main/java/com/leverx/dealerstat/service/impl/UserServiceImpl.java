@@ -21,47 +21,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserConverter userConverter;
-    private final ConfirmationRepository confirmationRepository;
-    private final PasswordEncoder encoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           UserConverter userConverter,
-                           ConfirmationRepository confirmationRepository,
-                           PasswordEncoder encoder) {
+                           UserConverter userConverter) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
-        this.confirmationRepository = confirmationRepository;
-        this.encoder = encoder;
     }
-
-
-//    @Override
-//    @Transactional
-//    public UserDTO save(UserDTO user) throws AlreadyExistsException {
-//        if (userRepository.existsByEmail(user.getEmail())) {
-//            throw new AlreadyExistsException("User is already exists");
-//        }
-//
-//        user.setPassword(encoder.encode(user.getPassword()));
-//        user.setConfirmed(false);
-//        user.setRole(Role.USER);
-//        user.setCreatingDate(new Date());
-//
-//        int oneDayInMilliseconds = 16040;
-//        String code = UUID.randomUUID().toString();
-//        Date expirationTime = new Date(new Date().getTime() + oneDayInMilliseconds);
-//
-//        Confirmation confirmation = new Confirmation();
-//        confirmation.setCode(code);
-//        confirmation.setExpirationTime(expirationTime);
-//        confirmation.setUser(user);
-//
-//        user.setConfirmation(confirmation);
-//        repository.save(user);
-//        //   confirmationsRepository.save(confirmation);
-//        return user;
-//    }
 
     @Override
     @Transactional(readOnly = true)
@@ -80,8 +46,6 @@ public class UserServiceImpl implements UserService {
         return userConverter.convertToDTO(user);
     }
 
-
-
     @Override
     @Transactional(readOnly = true)
     public UserDTO findByEmail(String email) throws NotFoundException {
@@ -92,20 +56,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO update(UserDTO userDTO) {
-        if (!userRepository.existsByEmail(userDTO.getEmail())) {
+        if (!userRepository.existsById(userDTO.getId())) {
             throw new NotFoundException("User is not found");
         }
         return userConverter.convertToDTO(userRepository.save(userConverter.convertToModel(userDTO)));
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("User is not found");
         }
         userRepository.deleteById(id);
     }
-
-
 }

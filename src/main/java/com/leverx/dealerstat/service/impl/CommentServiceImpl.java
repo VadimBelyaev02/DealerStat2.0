@@ -5,8 +5,6 @@ import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.dto.CommentDTO;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.entity.Permission;
-import com.leverx.dealerstat.entity.Role;
-import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
@@ -42,14 +40,14 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public List<CommentDTO> getUserComments(Long userId) {
-        return commentRepository.findAllByAuthorId(userId).stream()
+        return commentRepository.findAllByUserId(userId).stream()
                 .map(commentConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CommentDTO getCommentById(Long commentId) {
+    public CommentDTO getById(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException("Comment is not found");
         });
@@ -58,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void delete(Long commentId) {
         if (!commentRepository.existsById(commentId)) {
             throw new NotFoundException("Comment is not found");
         }
@@ -84,7 +82,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDTO getAuthor(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             throw new NotFoundException("Comment is not found");
@@ -94,17 +92,20 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Double calculateRating(Long userId) {
+    public Map<UserDTO, Double> getUserRating(Long userId) {
         List<Comment> comments = commentRepository.findAllByUserId(userId);
         if (comments.size() == 0) {
             throw new NotFoundException("No one comment was found");
         }
-        return (comments.stream().map(Comment::getRate).reduce(0D, Double::sum))
+        Double userRating = (comments.stream().map(Comment::getRate).reduce(0D, Double::sum))
                 / (long) comments.size();
+        UserDTO author = userConverter.convertToDTO(comments.get(0).getUser());
+
+        return Collections.singletonMap(author, userRating);
     }
 
     @Transactional(readOnly = true)
-    public Map<UserDTO, Double> calculateAllRating() {
+    public Map<UserDTO, Double> getRating() {
 //        List<CommentDTO> comments = commentRepository.findAll().stream()
 //                .map(commentConverter::convertToDTO)
 //                .collect(Collectors.toList());
@@ -128,7 +129,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CommentDTO> getAll() {
         return commentRepository.findAll().stream()
                 .map(commentConverter::convertToDTO)
@@ -137,27 +138,36 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDTO updateComment(CommentDTO comment) {
+    public CommentDTO update(CommentDTO commentDTO) {
         Long userId = userFactory.currentUser().getId();
-        if (!commentRepository.existsById(comment.getId())) {
-            throw new NotFoundException("Comment is not found or is not approved");
-        }
-        if (!commentRepository.getById(comment.getId()).getAuthor().getId().equals(userId)) {
+
+        Comment comment = commentRepository.findById(commentDTO.getId()).orElseThrow(() -> {
+            throw new NotFoundException("Comment is not found");
+        });
+        if (!comment.getAuthor().getId().equals(userId)) {
             throw new AccessDeniedException("It's not your comment!");
         }
-        return commentConverter.convertToDTO(commentRepository.save(commentConverter.convertToModel(comment)));
+        return commentDTO;
+//        if (!commentRepository.existsById(comment.getId())) {
+//            throw new NotFoundException("Comment is not found or is not approved");
+//        }
+//        if (!commentRepository.getById(comment.getId()).getAuthor().getId().equals(userId)) {
+//            throw new AccessDeniedException("It's not your comment!");
+//        }
+//        return commentConverter.convertToDTO(commentRepository.save(commentConverter.convertToModel(comment)));
     }
 
     @Override
-    @Transactional
-    public List<CommentDTO> getUnapprovedComments() {
+    @Transactional(readOnly = true)
+    public List<CommentDTO> getUnapproved() {
         return commentRepository.findAllByApproved(false).stream()
                 .map(commentConverter::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CommentDTO> findAllApproved() {
+    @Transactional(readOnly = true)
+    public List<CommentDTO> getApproved() {
         return commentRepository.findAll().stream()
                 .filter(Comment::getApproved)
                 .map(commentConverter::convertToDTO)

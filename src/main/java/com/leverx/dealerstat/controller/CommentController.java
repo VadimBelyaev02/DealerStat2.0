@@ -28,13 +28,13 @@ public class CommentController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CommentDTO getComment(@PathVariable("id") Long commentId) {
-        return commentService.getCommentById(commentId);
+        return commentService.getById(commentId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CommentDTO> getAllComments() {
-        return commentService.findAllApproved();
+        return commentService.getApproved();
     }
 
     @PostMapping
@@ -49,7 +49,7 @@ public class CommentController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteComment(@PathVariable("id") Long commentId) {
-        commentService.deleteComment(commentId);
+        commentService.delete(commentId);
     }
 
     @PutMapping
@@ -59,12 +59,12 @@ public class CommentController {
             result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
-        return commentService.updateComment(commentDTO);
+        return commentService.update(commentDTO);
     }
 
     @GetMapping("/unapproved")
     @ResponseStatus(HttpStatus.OK)
     public List<CommentDTO> getUnapprovedComments() {
-        return commentService.getUnapprovedComments();
+        return commentService.getUnapproved();
     }
 }

@@ -10,10 +10,10 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-   List<Comment> findAllByAuthorId(Long id);
+    List<Comment> findAllByAuthorId(Long id);
 
-   List<Comment>findAllByApproved(boolean approved);
+    List<Comment> findAllByApproved(boolean approved);
 
-   List<Comment> findAllByUserId(Long id);
+    List<Comment> findAllByUserId(Long id);
 
 }
