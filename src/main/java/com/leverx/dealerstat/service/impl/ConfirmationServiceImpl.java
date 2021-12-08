@@ -24,7 +24,7 @@ public class ConfirmationServiceImpl implements ConfirmationService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDTO findUserByCode(String code) {
+    public UserDTO getUserByCode(String code) {
         Confirmation confirmation = confirmationRepository.findByCode(code).orElseThrow(() -> {
             throw new NotFoundException("Code is not found");
         });

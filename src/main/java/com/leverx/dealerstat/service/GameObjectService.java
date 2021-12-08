@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface GameObjectService {
 
-    GameObjectDTO findById(Long gameObjectId);
+    GameObjectDTO getById(Long gameObjectId);
 
-    List<GameObjectDTO> findAll();
+    List<GameObjectDTO> getAll();
 
     GameObjectDTO save(GameObjectDTO gameObject);
 
-    List<GameObjectDTO> findAllByCurrentUser();
+    List<GameObjectDTO> getAllByCurrentUser();
 
     GameObjectDTO update(GameObjectDTO gameObject);
 

@@ -26,7 +26,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DealDTO> findAll() {
+    public List<DealDTO> getAll() {
         return dealRepository.findAll().stream()
                 .map(dealConverter::convertToDTO)
                 .collect(Collectors.toList());
@@ -34,7 +34,7 @@ public class DealServiceImpl implements DealService {
 
     @Override
     @Transactional(readOnly = true)
-    public DealDTO findById(Long id) {
+    public DealDTO getById(Long id) {
         Deal deal = dealRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("The deal is not found");
         });

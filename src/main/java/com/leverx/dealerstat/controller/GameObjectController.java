@@ -33,7 +33,7 @@ public class GameObjectController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public GameObjectDTO getGameObject(@PathVariable("id") Long id) {
-        return gameObjectService.findById(id);
+        return gameObjectService.getById(id);
     }
 
     @PostMapping
@@ -49,13 +49,13 @@ public class GameObjectController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<GameObjectDTO> getAllGameObjects() {
-        return gameObjectService.findAll();
+        return gameObjectService.getAll();
     }
 
     @GetMapping("/my")
     @ResponseStatus(HttpStatus.OK)
     public List<GameObjectDTO> getAuthorizedUserGameObjects() {
-        return gameObjectService.findAllByCurrentUser();
+        return gameObjectService.getAllByCurrentUser();
     }
 
 

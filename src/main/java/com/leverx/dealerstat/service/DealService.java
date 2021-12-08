@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface DealService {
 
-    List<DealDTO> findAll();
+    List<DealDTO> getAll();
 
-    DealDTO findById(Long id);
+    DealDTO getById(Long id);
 
     DealDTO save(DealDTO deal);
 

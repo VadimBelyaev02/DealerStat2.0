@@ -1,10 +1,18 @@
 package com.leverx.dealerstat.unit;
 
+import com.leverx.dealerstat.dto.CommentDTO;
+import com.leverx.dealerstat.dto.UserDTO;
+import com.leverx.dealerstat.dto.converter.CommentConverter;
+import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Comment;
 import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.repository.CommentRepository;
+import com.leverx.dealerstat.security.AuthenticatedUserFactory;
 import com.leverx.dealerstat.service.impl.CommentServiceImpl;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +24,8 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("UserService test")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
 public class CommentServiceUnitTest {
 
@@ -23,81 +33,158 @@ public class CommentServiceUnitTest {
     private CommentServiceImpl commentsService;
 
     @Mock
+    private CommentConverter commentConverter;
+
+    @Mock
     private CommentRepository commentRepository;
+
+    @Mock
+    private AuthenticatedUserFactory userFactory;
+
+    @Mock
+    private UserConverter userConverter;
 
 
     @Test
-    public void shouldReturnCommentById() {
+    public void Given_ServiceTriesFindCommentById_When_GetCommentId_Then_FoundCommentReturned() {
+        Long id = 1L;
         Comment comment = new Comment();
-        comment.setId(1L);
-        Mockito.when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
+        CommentDTO commentDTO = new CommentDTO();
+        comment.setId(id);
 
-        assertNotNull(commentsService.getComment(1L));
+        Mockito.when(commentRepository.findById(id)).thenReturn(Optional.of(comment));
+        Mockito.when(commentConverter.convertToDTO(comment)).thenReturn(commentDTO);
+
+        assertEquals(commentsService.getById(id), commentDTO);
+
+        Mockito.verify(commentRepository, Mockito.only()).findById(id);
+        Mockito.verify(commentConverter, Mockito.only()).convertToDTO(comment);
+
     }
 
     @Test
-    public void shouldReturnAllComments() {
+    public void Given_ServiceTriesFindAllComments_When_GetNothing_Then_AllFoundCommentsReturned() {
         List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment());
-        comments.add(new Comment());
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        Comment comment = new Comment();
+        CommentDTO commentDTO = new CommentDTO();
+        comments.add(comment);
+        comments.add(comment);
+        commentDTOS.add(commentDTO);
+        commentDTOS.add(commentDTO);
+
+        Mockito.when(commentRepository.findAll()).thenReturn(comments);
+        Mockito.when(commentConverter.convertToDTO(comment)).thenReturn(commentDTO);
+
+        assertEquals(commentsService.getAll(), commentDTOS);
+
+        Mockito.verify(commentRepository, Mockito.only()).findAll();
+        Mockito.verify(commentConverter, Mockito.times(2)).convertToDTO(comment);
+    }
+
+    @Test
+    public void Given_ServiceTriesFindAllComments_When_GetNothing_Then_EmptyListReturned() {
+        List<Comment> comments = new ArrayList<>();
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        Comment comment = new Comment();
 
         Mockito.when(commentRepository.findAll()).thenReturn(comments);
 
-        assertNotNull(commentsService.findAll());
-        assertEquals(commentsService.findAll().size(), 2);
+        assertEquals(commentsService.getAll(), commentDTOS);
+
+        Mockito.verify(commentRepository, Mockito.only()).findAll();
+        Mockito.verify(commentConverter, Mockito.never()).convertToDTO(comment);
     }
 
     @Test
-    public void shouldReturnAllCommentsByUserId() {
+    public void Given_ServiceTriesFindAllCommentsByUserId_When_GetUserId_Then_AllCommentsReturned() {
+        Long id = 1L;
         List<Comment> comments = new ArrayList<>();
+        List<CommentDTO> commentDTOS = new ArrayList<>();
         User user = new User();
-        user.setId(1L);
+        user.setId(id);
         Comment comment = new Comment();
-        Comment comment1 = new Comment();
-        comment.setId(1L);
+        CommentDTO commentDTO = new CommentDTO();
+        comment.setId(id);
         comment.setAuthor(user);
-        comment1.setId(2L);
-        comment1.setAuthor(user);
+        commentDTO.setId(id);
+        commentDTO.setAuthorId(id);
         comments.add(comment);
-        comments.add(comment1);
+        comments.add(comment);
+        commentDTOS.add(commentDTO);
+        commentDTOS.add(commentDTO);
 
-        Mockito.when(commentRepository.findAllByUserId(1L)).thenReturn(comments);
+        Mockito.when(commentRepository.findAllByUserId(id)).thenReturn(comments);
+        Mockito.when(commentConverter.convertToDTO(comment)).thenReturn(commentDTO);
 
-        assertEquals(commentsService.getComments(1L).size(), 2);
+        assertEquals(commentsService.getUserComments(id), commentDTOS);
+
+        Mockito.verify(commentRepository, Mockito.only()).findAllByUserId(id);
+        Mockito.verify(commentConverter, Mockito.times(2)).convertToDTO(comment);
     }
 
 
     @Test
-    public void shouldReturnSavedComment() {
+    public void Given_ServiceTriesSaveComment_When_GetComment_Then_SavedCommentReturned() {
+        Long id = 1L;
         Comment comment = new Comment();
-        comment.setId(1L);
+        CommentDTO commentDTO = new CommentDTO();
+        UserDTO author = new UserDTO();
+        commentDTO.setUserId(id);
+        commentDTO.setId(id);
 
         Mockito.when(commentRepository.save(comment)).thenReturn(comment);
+        Mockito.when(commentRepository.existsById(id)).thenReturn(false);
+        Mockito.when(userFactory.currentUser()).thenReturn(author);
+        Mockito.when(commentConverter.convertToDTO(comment)).thenReturn(commentDTO);
+        Mockito.when(commentConverter.convertToModel(commentDTO)).thenReturn(comment);
 
-       // assertEquals(commentsService.save(comment), comment);
+        assertEquals(commentsService.save(commentDTO), commentDTO);
+
+        Mockito.verify(commentRepository, Mockito.times(1)).existsById(id);
+        Mockito.verify(commentRepository, Mockito.times(1)).save(comment);
+        Mockito.verify(commentConverter, Mockito.times(1)).convertToDTO(comment);
+        Mockito.verify(commentConverter, Mockito.times(1)).convertToModel(commentDTO);
+        Mockito.verify(userFactory, Mockito.only()).currentUser();
     }
 
     @Test
-    public void shouldReturnUserByCommentId() {
-        User user = new User();
-        user.setId(1L);
+    public void Given_ServiceTriesFindAuthorByCommentId_When_GetCommentId_Then_UserReturned() {
+        Long id = 1L;
+        User author = new User();
+        UserDTO authorDTO = new UserDTO();
+        author.setId(id);
         Comment comment = new Comment();
-        comment.setId(1L);
-        comment.setAuthor(user);
+        comment.setId(id);
+        comment.setAuthor(author);
 
-        Mockito.when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
+      //  UserConverter userConverter = Mockito.mock(UserConverter.class);
 
-        assertEquals(commentsService.getAuthor(comment.getId()), user);
+        Mockito.when(commentRepository.findById(id)).thenReturn(Optional.of(comment));
+        Mockito.when(userConverter.convertToDTO(author)).thenReturn(authorDTO);
+
+        assertEquals(commentsService.getAuthor(id), authorDTO);
+
+        Mockito.verify(commentRepository, Mockito.only()).findById(id);
+        Mockito.verify(userConverter, Mockito.only()).convertToDTO(author);
     }
 
     @Test
-    public void shouldCalculateRatingOfAllUsers() {
+    public void Given_ServiceTriesCalculateRating_When_GetNothing_Then_RatingReturned() {
+       // UserConverter userConverter = Mockito.mock(UserConverter.class);
+
         List<Comment> comments = new ArrayList<>();
         Comment comment1 = new Comment();
         Comment comment2 = new Comment();
         Comment comment3 = new Comment();
+        CommentDTO commentDTO1 = new CommentDTO();
+        CommentDTO commentDTO2 = new CommentDTO();
+        CommentDTO commentDTO3 = new CommentDTO();
         User user1 = new User();
         User user2 = new User();
+        UserDTO userDTO1 = new UserDTO();
+        UserDTO userDTO2 = new UserDTO();
+
         comment1.setRate(1.5);
         comment1.setUser(user1);
         comment2.setRate(2.5);
@@ -109,18 +196,29 @@ public class CommentServiceUnitTest {
         comments.add(comment3);
 
         Mockito.when(commentRepository.findAll()).thenReturn(comments);
+        Mockito.when(commentConverter.convertToDTO(comment1)).thenReturn(commentDTO1);
+        Mockito.when(commentConverter.convertToModel(commentDTO1)).thenReturn(comment1);
+        Mockito.when(userConverter.convertToDTO(user1)).thenReturn(userDTO1);
+        Mockito.when(userConverter.convertToModel(userDTO1)).thenReturn(user1);
 
-        Map<User, Double> rating = new HashMap<>();
-        rating.put(user1, 1.5D);
-        rating.put(user2, (2.5 + 5D) / 2);
+        Map<UserDTO, Double> rating = new HashMap<>();
+        rating.put(userDTO1, 1.5D);
+        rating.put(userDTO2, (2.5 + 5D) / 2);
 
-        assertEquals(commentsService.calculateAllRating(), rating);
+        assertEquals(commentsService.getRating(), rating);
+
+        Mockito.verify(commentRepository, Mockito.only()).findAll();
+        Mockito.verify(commentConverter, Mockito.times(1)).convertToModel(commentDTO1);
+        Mockito.verify(commentConverter, Mockito.times(1)).convertToDTO(comment1);
     }
 
     @Test
-    public void shouldCalculateUserRatingById() {
+    public void Given_ServiceTriesCalculateUserRating_When_GetUserId_Then_RatingReturned() {
+     //   UserConverter userConverter = Mockito.mock(UserConverter.class);
+        Long userId = 1L;
         User user = new User();
-        user.setId(1L);
+        UserDTO userDTO = new UserDTO();
+        user.setId(userId);
         List<Comment> comments = new ArrayList<>();
         Comment comment1 = new Comment();
         Comment comment2 = new Comment();
@@ -135,17 +233,29 @@ public class CommentServiceUnitTest {
         comments.add(comment2);
         comments.add(comment3);
 
-        Mockito.when(commentRepository.findAllByUserId(user.getId())).thenReturn(comments);
+        Map<UserDTO, Double> userRating = Collections.singletonMap(userDTO, (4D + 1D + 5D) / 3);
 
-        assertEquals(commentsService.calculateRating(user.getId()), (4D + 1D + 5D) / 3);
+        Mockito.when(commentRepository.findAllByUserId(userId)).thenReturn(comments);
+        Mockito.when(userConverter.convertToDTO(user)).thenReturn(userDTO);
+
+        assertEquals(commentsService.getUserRating(userId), userRating);
+
+        Mockito.verify(commentRepository, Mockito.only()).findAllByUserId(userId);
+        Mockito.verify(userConverter, Mockito.only()).convertToDTO(user);
     }
 
     @Test
-    public void shouldThrowExceptionDuringUpdating() {
+    public void Given_ServiceTriesUpdateComment_When_GetComment_Then_ThrowException() {
+        Long commentId = 1L;
         Comment comment = new Comment();
-        comment.setId(1L);
+        CommentDTO commentDTO = new CommentDTO();
+        UserDTO userDTO = new UserDTO();
+        comment.setId(commentId);
 
-        Mockito.when(commentRepository.findById(comment.getId())).thenReturn(Optional.empty());
+//        Mockito.when(commentRepository.existsById(commentId)).thenReturn(false);
+//        Mockito.when(userFactory.currentUser()).thenReturn(userDTO);
+//        Mockito.when(commentRepository.getById(commentId)).thenReturn(comment);
+//        Mockito.when()
 
       //  assertThrows(NotFoundException.class, () -> commentsService.updateComment(comment, 1L));
     }
