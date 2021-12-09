@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.security;
+package com.leverx.dealerstat.security.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;

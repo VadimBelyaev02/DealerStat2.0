@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.entity;
+package com.leverx.dealerstat.entity.enums;
 
 public enum Permission {
     TRADE("trade"),

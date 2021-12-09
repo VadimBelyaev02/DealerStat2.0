@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.security;
+package com.leverx.dealerstat.security.jwt;
 
 import com.leverx.dealerstat.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
