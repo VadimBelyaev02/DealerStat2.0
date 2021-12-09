@@ -22,6 +22,6 @@ public class AuthenticatedUserFactory {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
-        return userService.findByEmail(email);
+        return userService.getByEmail(email);
     }
 }

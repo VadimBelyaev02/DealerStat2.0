@@ -1,5 +1,7 @@
 package com.leverx.dealerstat.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -16,6 +18,7 @@ public class DealDTO {
     private Long id;
 
     @NotBlank
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate date;
 
     @NotBlank

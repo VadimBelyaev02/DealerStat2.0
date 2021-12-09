@@ -128,7 +128,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         confirmation.setCode(code);
         confirmation.setUser(user);
         confirmation.setExpirationTime(expirationTime);
-        user.setConfirmation(confirmation);
+      //  user.setConfirmation(confirmation);
         // may be no?
         String subject = "Please confirm your account";
         senderService.sendMessage(subject, requestDTO.getEmail(), code);

@@ -18,9 +18,9 @@ public interface CommentService {
 
     UserDTO getAuthor(Long commentId);
 
-    Map<UserDTO, Double> getUserRating(Long userId);
+    Map<Long, Double> getUserRating(Long userId);
 
-    Map<UserDTO, Double> getRating();
+    Map<Long, Double> getRating();
 
     List<CommentDTO> getAll();
 
