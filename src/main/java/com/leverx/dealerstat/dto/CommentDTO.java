@@ -1,10 +1,14 @@
 package com.leverx.dealerstat.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -14,26 +18,24 @@ import java.util.Date;
 @NoArgsConstructor
 public class CommentDTO {
 
-    @NotBlank
     private Long id;
 
     @NotBlank
     private String message;
 
-    @NotBlank
+    @NotNull
     @Min(0)
     @Max(5)
     private Double rate;
 
-    @NotBlank
     private Long userId;
 
-    @NotBlank
     private Long authorId;
 
-    @NotBlank
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") //@HH:mm:ss.SSSZ")
     private LocalDate createdAt;
 
-    @NotBlank
+    @NotNull
     private boolean approved;
 }

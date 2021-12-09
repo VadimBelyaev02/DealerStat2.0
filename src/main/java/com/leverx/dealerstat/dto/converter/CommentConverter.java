@@ -7,6 +7,9 @@ import com.leverx.dealerstat.repository.CommentRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Objects;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class CommentConverter {
@@ -23,7 +26,7 @@ public class CommentConverter {
         final Double rate = comment.getRate();
         final Long authorId = comment.getAuthor().getId();
         final Long userId = comment.getAuthor().getId();
-        final LocalDate createdAt = comment.getCreatingDate();
+        final LocalDate createdAt = isNull(comment.getCreatingDate()) ? LocalDate.now() : comment.getCreatingDate();
         final boolean approved = comment.getApproved();
         return CommentDTO.builder()
                 .id(id)

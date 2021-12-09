@@ -4,7 +4,8 @@ import com.leverx.dealerstat.dto.converter.CommentConverter;
 import com.leverx.dealerstat.dto.converter.UserConverter;
 import com.leverx.dealerstat.dto.CommentDTO;
 import com.leverx.dealerstat.dto.UserDTO;
-import com.leverx.dealerstat.entity.Permission;
+import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.entity.enums.Permission;
 import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
@@ -92,20 +93,38 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Map<UserDTO, Double> getUserRating(Long userId) {
+    public Map<Long, Double> getUserRating(Long userId) {
         List<Comment> comments = commentRepository.findAllByUserId(userId);
         if (comments.size() == 0) {
             throw new NotFoundException("No one comment was found");
         }
         Double userRating = (comments.stream().map(Comment::getRate).reduce(0D, Double::sum))
                 / (long) comments.size();
-        UserDTO author = userConverter.convertToDTO(comments.get(0).getUser());
+        Long authorId = userConverter.convertToDTO(comments.get(0).getUser()).getId();
 
-        return Collections.singletonMap(author, userRating);
+        return Collections.singletonMap(authorId, userRating);
     }
 
     @Transactional(readOnly = true)
-    public Map<UserDTO, Double> getRating() {
+    public Map<Long, Double> getRating() {
+        List<Comment> comments = commentRepository.findAll();
+
+        Map<Long, Integer> countOfRates = new HashMap<>();
+        Map<Long, Double> rating = new HashMap<>();
+        for (Comment comment : comments) {
+            Long userId = comment.getUser().getId();
+            if (rating.containsKey(userId)) {
+                rating.put(userId, rating.get(userId) + comment.getRate());
+                countOfRates.put(userId, countOfRates.get(userId) + 1);
+            } else {
+                rating.put(userId, comment.getRate());
+                countOfRates.put(userId, 1);
+            }
+        }
+        for (Map.Entry<Long, Double> entry : rating.entrySet()) {
+            entry.setValue(entry.getValue() / countOfRates.get(entry.getKey()));
+        }
+        return rating;
 //        List<CommentDTO> comments = commentRepository.findAll().stream()
 //                .map(commentConverter::convertToDTO)
 //                .collect(Collectors.toList());
@@ -125,7 +144,6 @@ public class CommentServiceImpl implements CommentService {
 //            entry.setValue(entry.getValue() / countOfRates.get(entry.getKey()));
 //        }
 //        return rating;
-        return null;
     }
 
     @Override

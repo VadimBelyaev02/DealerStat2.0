@@ -1,7 +1,7 @@
 package com.leverx.dealerstat.service.impl;
 
 import com.leverx.dealerstat.entity.Confirmation;
-import com.leverx.dealerstat.entity.Role;
+import com.leverx.dealerstat.entity.enums.Role;
 import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.NotFoundException;
@@ -10,7 +10,7 @@ import com.leverx.dealerstat.model.RegistrationRequestDTO;
 import com.leverx.dealerstat.model.ResetPasswordRequestDTO;
 import com.leverx.dealerstat.repository.ConfirmationRepository;
 import com.leverx.dealerstat.repository.UserRepository;
-import com.leverx.dealerstat.security.JwtTokenProvider;
+import com.leverx.dealerstat.security.jwt.JwtTokenProvider;
 import com.leverx.dealerstat.service.AuthorizationService;
 import com.leverx.dealerstat.service.MailSenderService;
 import org.springframework.security.authentication.AuthenticationManager;
