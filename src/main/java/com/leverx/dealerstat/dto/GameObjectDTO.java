@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class GameObjectDTO {
 
-    @NotNull
     private Long id;
 
     @NotBlank
@@ -26,9 +25,6 @@ public class GameObjectDTO {
 
     @NotNull
     private Long authorId;
-
-    @NotNull
-    private Long gameId;
 
     @NotNull
     @JsonSerialize(using = ToStringSerializer.class)

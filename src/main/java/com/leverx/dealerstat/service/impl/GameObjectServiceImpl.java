@@ -4,6 +4,7 @@ import com.leverx.dealerstat.dto.converter.GameObjectConverter;
 import com.leverx.dealerstat.dto.GameObjectDTO;
 import com.leverx.dealerstat.dto.UserDTO;
 import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.entity.enums.Permission;
 import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +54,7 @@ public class GameObjectServiceImpl implements GameObjectService {
     @Override
     @Transactional
     public GameObjectDTO save(GameObjectDTO gameObject) {
-        if (gameObjectRepository.existsById(gameObject.getId())) {
+        if (gameObjectRepository.existsByTitle(gameObject.getTitle())) {
             throw new AlreadyExistsException("Game object is already exists");
         }
         return gameObjectConverter.convertToDTO(gameObjectRepository.save(gameObjectConverter.convertToModel(gameObject)));
@@ -71,10 +73,11 @@ public class GameObjectServiceImpl implements GameObjectService {
     @Transactional
     public GameObjectDTO update(GameObjectDTO gameObject) {
         UserDTO user = userFactory.currentUser();
-        if (!gameObjectRepository.existsById(gameObject.getId())) {
+        if (!gameObjectRepository.existsByTitle(gameObject.getTitle())) {
             throw new NotFoundException("Game object is not found");
         }
-        if (!gameObjectRepository.getById(gameObject.getId()).getAuthor().getId().equals(user.getId())) {
+        if (!Objects.equals(gameObject.getAuthorId(), user.getId())
+                && !user.getRole().getPermissions().contains(Permission.UPDATE)) {
             throw new AccessDeniedException("It is not your game object");
         }
         return gameObjectConverter.convertToDTO(gameObjectRepository.save(gameObjectConverter.convertToModel(gameObject)));
