@@ -3,6 +3,7 @@ package com.leverx.dealerstat.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class Deal {
 
     @ManyToOne
     @JoinColumn(name = "object_id")
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private GameObject gameObject;
 
     @ManyToOne()

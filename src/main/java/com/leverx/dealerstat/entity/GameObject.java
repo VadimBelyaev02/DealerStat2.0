@@ -3,6 +3,7 @@ package com.leverx.dealerstat.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -40,7 +41,7 @@ public class GameObject {
     @Column(name = "price")
     private BigDecimal price;
 
-    @OneToMany(mappedBy = "gameObject", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gameObject", fetch = FetchType.LAZY)
     private List<Deal> deals;
 
     @ManyToMany(fetch = FetchType.LAZY)

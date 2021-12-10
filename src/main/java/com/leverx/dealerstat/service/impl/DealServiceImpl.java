@@ -2,10 +2,13 @@ package com.leverx.dealerstat.service.impl;
 
 import com.leverx.dealerstat.dto.converter.DealConverter;
 import com.leverx.dealerstat.dto.DealDTO;
-import com.leverx.dealerstat.exception.AlreadyExistsException;
+import com.leverx.dealerstat.entity.GameObject;
+import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.entity.Deal;
 import com.leverx.dealerstat.repository.DealRepository;
+import com.leverx.dealerstat.repository.GameObjectRepository;
+import com.leverx.dealerstat.repository.UserRepository;
 import com.leverx.dealerstat.service.DealService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +21,17 @@ public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
     private final DealConverter dealConverter;
+    private final GameObjectRepository gameObjectRepository;
+    private final UserRepository userRepository;
 
-    public DealServiceImpl(DealRepository dealRepository, DealConverter dealConverter) {
+    public DealServiceImpl(DealRepository dealRepository,
+                           DealConverter dealConverter,
+                           GameObjectRepository gameObjectRepository,
+                           UserRepository userRepository) {
         this.dealRepository = dealRepository;
         this.dealConverter = dealConverter;
+        this.gameObjectRepository = gameObjectRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -43,12 +53,15 @@ public class DealServiceImpl implements DealService {
 
     @Override
     @Transactional
-    public DealDTO save(DealDTO deal) {
-        if (dealRepository.existsById(deal.getId())) {
-            throw new AlreadyExistsException("Deal is not found");
-        }
-        return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(deal)));
-
+    public DealDTO save(DealDTO dealDTO) {
+        User user = userRepository.findById(dealDTO.getToId()).orElseThrow(() -> {
+            throw new NotFoundException("User is not found");
+        });
+        GameObject gameObject = gameObjectRepository.findById(dealDTO.getObjectId()).orElseThrow(() -> {
+            throw new NotFoundException("Object is not found");
+        });
+        gameObject.setAuthor(user);
+        return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(dealDTO)));
     }
 
     @Override
