@@ -26,6 +26,7 @@ public class GameServiceImpl implements GameService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public GameDTO getById(Long id) {
         Game game = gameRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("Game is not found");
@@ -60,7 +61,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
+        if (!gameRepository.existsById(id)) {
+            throw new NotFoundException("Game is not found");
+        }
         gameRepository.deleteById(id);
     }
 }

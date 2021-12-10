@@ -21,9 +21,6 @@ public class MailSenderServiceImpl implements MailSenderService {
     private final String password = "ecqxfgeuetrlcsxi";
 
     public void sendMessage(String subject, String email, String code) {
-        String siteURL = "http://localhost:8080";
-        String URL = siteURL + "/auth/confirm?code=" + code;
-
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
