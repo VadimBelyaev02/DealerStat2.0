@@ -158,13 +158,5 @@ public class UserServiceUnitTest {
 }
 
 /*
-    List<UserDTO> findAll();
 
-    UserDTO findById(Long id);
-
-    UserDTO findByEmail(String email);
-
-    UserDTO update(UserDTO userDTO);
-
-    void delete(Long id);
  */

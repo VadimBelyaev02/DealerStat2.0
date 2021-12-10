@@ -12,8 +12,4 @@ public interface ConfirmationRepository extends JpaRepository<Confirmation, Long
 
     Optional<Confirmation> findByCode(String code);
 
-    boolean existsByUserId(Long userId);
-
-    void deleteByUserId(Long userId);
-
 }

@@ -134,15 +134,13 @@ public class CommentServiceUnitTest {
         commentDTO.setId(id);
 
         Mockito.when(commentRepository.save(comment)).thenReturn(comment);
-        Mockito.when(commentRepository.existsById(id)).thenReturn(false);
         Mockito.when(userFactory.currentUser()).thenReturn(author);
         Mockito.when(commentConverter.convertToDTO(comment)).thenReturn(commentDTO);
         Mockito.when(commentConverter.convertToModel(commentDTO)).thenReturn(comment);
 
         assertEquals(commentsService.save(commentDTO), commentDTO);
 
-        Mockito.verify(commentRepository, Mockito.times(1)).existsById(id);
-        Mockito.verify(commentRepository, Mockito.times(1)).save(comment);
+        Mockito.verify(commentRepository, Mockito.only()).save(comment);
         Mockito.verify(commentConverter, Mockito.times(1)).convertToDTO(comment);
         Mockito.verify(commentConverter, Mockito.times(1)).convertToModel(commentDTO);
         Mockito.verify(userFactory, Mockito.only()).currentUser();
@@ -158,8 +156,6 @@ public class CommentServiceUnitTest {
         comment.setId(id);
         comment.setAuthor(author);
 
-      //  UserConverter userConverter = Mockito.mock(UserConverter.class);
-
         Mockito.when(commentRepository.findById(id)).thenReturn(Optional.of(comment));
         Mockito.when(userConverter.convertToDTO(author)).thenReturn(authorDTO);
 
@@ -171,19 +167,16 @@ public class CommentServiceUnitTest {
 
     @Test
     public void Given_ServiceTriesCalculateRating_When_GetNothing_Then_RatingReturned() {
-       // UserConverter userConverter = Mockito.mock(UserConverter.class);
-
+        Long userId1 = 1L;
+        Long userId2 = 2L;
         List<Comment> comments = new ArrayList<>();
         Comment comment1 = new Comment();
         Comment comment2 = new Comment();
         Comment comment3 = new Comment();
-        CommentDTO commentDTO1 = new CommentDTO();
-        CommentDTO commentDTO2 = new CommentDTO();
-        CommentDTO commentDTO3 = new CommentDTO();
         User user1 = new User();
         User user2 = new User();
-        UserDTO userDTO1 = new UserDTO();
-        UserDTO userDTO2 = new UserDTO();
+        user1.setId(userId1);
+        user2.setId(userId2);
 
         comment1.setRate(1.5);
         comment1.setUser(user1);
@@ -196,29 +189,23 @@ public class CommentServiceUnitTest {
         comments.add(comment3);
 
         Mockito.when(commentRepository.findAll()).thenReturn(comments);
-        Mockito.when(commentConverter.convertToDTO(comment1)).thenReturn(commentDTO1);
-        Mockito.when(commentConverter.convertToModel(commentDTO1)).thenReturn(comment1);
-        Mockito.when(userConverter.convertToDTO(user1)).thenReturn(userDTO1);
-        Mockito.when(userConverter.convertToModel(userDTO1)).thenReturn(user1);
 
-        Map<UserDTO, Double> rating = new HashMap<>();
-        rating.put(userDTO1, 1.5D);
-        rating.put(userDTO2, (2.5 + 5D) / 2);
-
-        assertEquals(commentsService.getRating(), rating);
+        Map<Long, Double> rating = new HashMap<>();
+        rating.put(1L, 1.5D);
+        rating.put(2L, (2.5 + 5D) / 2);
+        Map<Long, Double> rating2 = commentsService.getRating();
+        assertEquals(rating2, rating);
 
         Mockito.verify(commentRepository, Mockito.only()).findAll();
-        Mockito.verify(commentConverter, Mockito.times(1)).convertToModel(commentDTO1);
-        Mockito.verify(commentConverter, Mockito.times(1)).convertToDTO(comment1);
     }
 
     @Test
     public void Given_ServiceTriesCalculateUserRating_When_GetUserId_Then_RatingReturned() {
-     //   UserConverter userConverter = Mockito.mock(UserConverter.class);
         Long userId = 1L;
         User user = new User();
         UserDTO userDTO = new UserDTO();
         user.setId(userId);
+        userDTO.setId(userId);
         List<Comment> comments = new ArrayList<>();
         Comment comment1 = new Comment();
         Comment comment2 = new Comment();
@@ -233,7 +220,7 @@ public class CommentServiceUnitTest {
         comments.add(comment2);
         comments.add(comment3);
 
-        Map<UserDTO, Double> userRating = Collections.singletonMap(userDTO, (4D + 1D + 5D) / 3);
+        Map<Long, Double> userRating = Collections.singletonMap(userId, (4D + 1D + 5D) / 3);
 
         Mockito.when(commentRepository.findAllByUserId(userId)).thenReturn(comments);
         Mockito.when(userConverter.convertToDTO(user)).thenReturn(userDTO);
@@ -245,40 +232,20 @@ public class CommentServiceUnitTest {
     }
 
     @Test
-    public void Given_ServiceTriesUpdateComment_When_GetComment_Then_ThrowException() {
+    public void Given_ServiceTriesUpdateComment_When_CommentNotFound_Then_ThrowException() {
         Long commentId = 1L;
         Comment comment = new Comment();
         CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(commentId);
         UserDTO userDTO = new UserDTO();
         comment.setId(commentId);
 
-//        Mockito.when(commentRepository.existsById(commentId)).thenReturn(false);
-//        Mockito.when(userFactory.currentUser()).thenReturn(userDTO);
-//        Mockito.when(commentRepository.getById(commentId)).thenReturn(comment);
-//        Mockito.when()
+        Mockito.when(commentRepository.findById(commentId)).thenReturn(Optional.ofNullable(null));
+        Mockito.when(userFactory.currentUser()).thenReturn(userDTO);
 
-      //  assertThrows(NotFoundException.class, () -> commentsService.updateComment(comment, 1L));
+        assertThrows(NotFoundException.class, () -> commentsService.update(commentDTO));
+
+        Mockito.verify(userFactory, Mockito.only()).currentUser();
+        Mockito.verify(commentRepository, Mockito.only()).findById(commentId);
     }
 }
-//
-//    List<Comment> getComments(Long userId);
-//
-//    Comment getComment(Long commentId);
-//
-//    void deleteComment(Long commentId);
-//
-//    void save(Comment comment);
-//
-//    User getAuthor(Long commentId);
-//
-//    Double calculateRating(Long userId);
-//
-//    Map<User, Double> calculateAllRating(Boolean ascending);
-//
-//    List<Comment> findAll();
-//
-//    void updateComment(Comment comment, Long id);
-//
-//    List<Comment> getUnapprovedComments();
-//
-//    void approveComment(Long commentId);

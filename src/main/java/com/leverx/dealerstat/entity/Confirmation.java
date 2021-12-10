@@ -28,7 +28,7 @@ public class Confirmation {
     private LocalDate expirationTime;
 
     @OneToOne
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

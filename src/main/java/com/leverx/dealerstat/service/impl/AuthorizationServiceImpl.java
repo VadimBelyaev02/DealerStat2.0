@@ -50,7 +50,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         this.confirmationRepository = confirmationRepository;
     }
 
-
     @Override
     @Transactional
     public void confirm(String code) {
@@ -58,8 +57,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             throw new NotFoundException("Code is not found");
         });
         confirmation.getUser().setConfirmed(true);
-        // do i have to save?
-        confirmationRepository.deleteById(confirmation.getId());
+        confirmationRepository.delete(confirmation);
     }
 
     @Override
@@ -88,7 +86,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
             throw new NotFoundException("User is not found");
         });
         user.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
-        // do i have to save?
     }
 
     @Override
