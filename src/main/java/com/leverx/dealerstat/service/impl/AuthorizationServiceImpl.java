@@ -73,13 +73,13 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         confirmation.setCode(code);
         confirmation.setUser(user);
         confirmation.setExpirationTime(expirationTime);
-//    public void sendMessage(String subject, String email, String code) {
         String subject = "Code to recover password";
         senderService.sendMessage(subject, email, code);
         confirmationRepository.save(confirmation);
     }
 
     @Override
+    @Transactional
     public void resetPassword(ResetPasswordRequestDTO requestDTO) {
         User user = userRepository.findByEmail(requestDTO.getEmail()).orElseThrow(() -> {
             throw new NotFoundException("User is not found");
@@ -89,6 +89,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     @Override
+    @Transactional
     public Map<String, String> authenticate(AuthenticationRequestDTO requestDTO) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -112,6 +113,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     @Override
+    @Transactional
     public void register(RegistrationRequestDTO requestDTO) {
         User user = new User();
         user.setConfirmed(false);
@@ -128,15 +130,14 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         confirmation.setCode(code);
         confirmation.setUser(user);
         confirmation.setExpirationTime(expirationTime);
-      //  user.setConfirmation(confirmation);
-        // may be no?
+        user.setConfirmation(confirmation);
         String subject = "Please confirm your account";
         senderService.sendMessage(subject, requestDTO.getEmail(), code);
-        // confirmationService.save(confirmation);
         userRepository.save(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String checkCode(String code) {
         return confirmationRepository.findByCode(code).orElseThrow(() -> {
             throw new NotFoundException("Code is not found");

@@ -30,7 +30,7 @@ public class AuthorizationController {
 
     @PostMapping("/forgot_password")
     @ResponseStatus(HttpStatus.OK)
-    public void forgotPassword(@RequestBody String email) {
+    public void forgotPassword(@RequestParam("email") String email) {
         authorizationService.forgotPassword(email);
     }
 
@@ -59,7 +59,6 @@ public class AuthorizationController {
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid RegistrationRequestDTO requestDTO, BindingResult result) {
         if (result.hasErrors()) {
-            result.getFieldError();
             throw new NotValidException(result.getAllErrors().toString());
         }
         authorizationService.register(requestDTO);

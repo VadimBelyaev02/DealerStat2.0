@@ -3,6 +3,7 @@ package com.leverx.dealerstat.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,11 +24,11 @@ public class Confirmation {
     @Column(name = "hash_code")
     private String code;
 
- //   @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expiration_time")
     private LocalDate expirationTime;
 
     @OneToOne
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

@@ -125,25 +125,6 @@ public class CommentServiceImpl implements CommentService {
             entry.setValue(entry.getValue() / countOfRates.get(entry.getKey()));
         }
         return rating;
-//        List<CommentDTO> comments = commentRepository.findAll().stream()
-//                .map(commentConverter::convertToDTO)
-//                .collect(Collectors.toList());
-//        Map<UserDTO, Integer> countOfRates = new HashMap<>();
-//        Map<UserDTO, Double> rating = new LinkedHashMap<>();
-//        for (CommentDTO comment : comments) {
-//            User user = comment.getUserId();
-//            if (rating.containsKey(user)) {
-//                rating.put(user, rating.get(user) + comment.getRate());
-//                countOfRates.put(user, countOfRates.get(user) + 1);
-//            } else {
-//                rating.put(user, comment.getRate());
-//                countOfRates.put(user, 1);
-//            }
-//        }
-//        for (Map.Entry<User, Double> entry : rating.entrySet()) {
-//            entry.setValue(entry.getValue() / countOfRates.get(entry.getKey()));
-//        }
-//        return rating;
     }
 
     @Override
