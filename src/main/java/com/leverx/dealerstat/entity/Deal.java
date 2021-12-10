@@ -21,11 +21,11 @@ public class Deal {
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "from_id")
     private User fromUser;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "object_id")
     private GameObject gameObject;
 

@@ -12,5 +12,4 @@ public interface GameObjectRepository extends JpaRepository<GameObject, Long> {
     boolean existsByTitle(String title);
 
     List<GameObject> findAllByAuthorId(Long authorId);
-
 }

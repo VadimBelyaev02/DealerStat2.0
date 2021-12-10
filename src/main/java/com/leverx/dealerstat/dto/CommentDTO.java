@@ -24,7 +24,7 @@ public class CommentDTO {
     private String message;
 
     @NotNull
-    @Min(0)
+    @Min(1)
     @Max(5)
     private Double rate;
 

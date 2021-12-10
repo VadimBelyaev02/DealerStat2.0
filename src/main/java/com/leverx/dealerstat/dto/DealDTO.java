@@ -1,10 +1,12 @@
 package com.leverx.dealerstat.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -16,16 +18,16 @@ public class DealDTO {
 
     private Long id;
 
-    @NotBlank
-    @JsonSerialize(using = ToStringSerializer.class)
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") //@HH:mm:ss.SSSZ")
     private LocalDate date;
 
-    @NotBlank
+    @NotNull
     private Long fromId;
 
-    @NotBlank
+    @NotNull
     private Long toId;
 
-    @NotBlank
+    @NotNull
     private Long objectId;
 }

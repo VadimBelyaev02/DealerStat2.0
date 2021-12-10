@@ -3,7 +3,7 @@ package com.leverx.dealerstat.dto.converter;
 import com.leverx.dealerstat.dto.ConfirmationDTO;
 import com.leverx.dealerstat.entity.Confirmation;
 import com.leverx.dealerstat.entity.User;
-import com.leverx.dealerstat.repository.ConfirmationRepository;
+import com.leverx.dealerstat.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,10 +11,10 @@ import java.time.LocalDate;
 @Component
 public class ConfirmationConverter {
 
-    private final ConfirmationRepository confirmationRepository;
+    private final UserRepository userRepository;
 
-    public ConfirmationConverter(ConfirmationRepository confirmationRepository) {
-        this.confirmationRepository = confirmationRepository;
+    public ConfirmationConverter(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public ConfirmationDTO convertToDTO(final Confirmation confirmation) {
@@ -34,7 +34,7 @@ public class ConfirmationConverter {
         final Long id = confirmationDTO.getId();
         final String code = confirmationDTO.getCode();
         final LocalDate expirationTime = confirmationDTO.getExpirationTime();
-        final User user = confirmationRepository.getById(confirmationDTO.getUserId()).getUser();
+        final User user = userRepository.getById(confirmationDTO.getUserId());
         return Confirmation.builder()
                 .id(id)
                 .code(code)

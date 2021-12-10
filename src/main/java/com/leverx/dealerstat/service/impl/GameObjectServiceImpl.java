@@ -84,9 +84,11 @@ public class GameObjectServiceImpl implements GameObjectService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         UserDTO user = userFactory.currentUser();
-        if (!user.getId().equals(gameObjectRepository.getById(id).getId())) {
+        if (!user.getId().equals(gameObjectRepository.getById(id).getId())
+                && !user.getRole().getPermissions().contains(Permission.DELETE)) {
             throw new AccessDeniedException("It is not your comment");
         }
         gameObjectRepository.deleteById(id);

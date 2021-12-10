@@ -1,9 +1,10 @@
 package com.leverx.dealerstat.service.impl;
 
 import com.leverx.dealerstat.entity.Confirmation;
-import com.leverx.dealerstat.entity.enums.Role;
 import com.leverx.dealerstat.entity.User;
+import com.leverx.dealerstat.entity.enums.Role;
 import com.leverx.dealerstat.exception.AccessDeniedException;
+import com.leverx.dealerstat.exception.AlreadyExistsException;
 import com.leverx.dealerstat.exception.NotFoundException;
 import com.leverx.dealerstat.model.AuthenticationRequestDTO;
 import com.leverx.dealerstat.model.RegistrationRequestDTO;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
@@ -115,6 +118,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Override
     @Transactional
     public void register(RegistrationRequestDTO requestDTO) {
+        if (userRepository.existsByEmail(requestDTO.getEmail())) {
+            throw new AlreadyExistsException("User is already exists");
+        }
         User user = new User();
         user.setConfirmed(false);
         user.setEmail(requestDTO.getEmail());

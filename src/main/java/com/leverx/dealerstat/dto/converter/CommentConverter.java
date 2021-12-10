@@ -4,20 +4,20 @@ import com.leverx.dealerstat.dto.CommentDTO;
 import com.leverx.dealerstat.entity.Comment;
 import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.repository.CommentRepository;
+import com.leverx.dealerstat.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
 @Component
 public class CommentConverter {
 
-    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
-    public CommentConverter(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
+    public CommentConverter(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public CommentDTO convertToDTO(final Comment comment) {
@@ -43,8 +43,8 @@ public class CommentConverter {
         final Long id = commentDTO.getId();
         final String message = commentDTO.getMessage();
         final Double rate = commentDTO.getRate();
-        final User author = commentRepository.getById(commentDTO.getId()).getAuthor();
-        final User user = commentRepository.getById(commentDTO.getUserId()).getUser();
+        final User author = userRepository.getById(commentDTO.getAuthorId());
+        final User user = userRepository.getById(commentDTO.getUserId());
         final boolean approved = commentDTO.isApproved();
         final LocalDate createdAt = commentDTO.getCreatedAt();
         return Comment.builder()
