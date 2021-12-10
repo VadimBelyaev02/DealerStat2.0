@@ -165,14 +165,7 @@ public class CommentServiceImpl implements CommentService {
         if (!comment.getAuthor().getId().equals(userId)) {
             throw new AccessDeniedException("It's not your comment!");
         }
-        return commentDTO;
-//        if (!commentRepository.existsById(comment.getId())) {
-//            throw new NotFoundException("Comment is not found or is not approved");
-//        }
-//        if (!commentRepository.getById(comment.getId()).getAuthor().getId().equals(userId)) {
-//            throw new AccessDeniedException("It's not your comment!");
-//        }
-//        return commentConverter.convertToDTO(commentRepository.save(commentConverter.convertToModel(comment)));
+        return commentConverter.convertToDTO(commentRepository.save(commentConverter.convertToModel(commentDTO)));
     }
 
     @Override

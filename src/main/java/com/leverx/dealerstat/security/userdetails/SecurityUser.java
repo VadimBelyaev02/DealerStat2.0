@@ -1,4 +1,4 @@
-package com.leverx.dealerstat.security;
+package com.leverx.dealerstat.security.userdetails;
 
 import com.leverx.dealerstat.entity.User;
 import lombok.Data;

@@ -33,7 +33,6 @@ public class Comment {
     private User author;
 
     @Column(name = "created_at")
- //   @Temporal(TemporalType.DATE)
     private LocalDate creatingDate;
 
     @Column(name = "approved")

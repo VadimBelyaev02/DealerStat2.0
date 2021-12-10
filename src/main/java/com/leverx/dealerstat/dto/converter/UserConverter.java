@@ -1,7 +1,7 @@
 package com.leverx.dealerstat.dto.converter;
 
 import com.leverx.dealerstat.dto.UserDTO;
-import com.leverx.dealerstat.entity.Role;
+import com.leverx.dealerstat.entity.enums.Role;
 import com.leverx.dealerstat.entity.User;
 import com.leverx.dealerstat.repository.ConfirmationRepository;
 import com.leverx.dealerstat.repository.UserRepository;

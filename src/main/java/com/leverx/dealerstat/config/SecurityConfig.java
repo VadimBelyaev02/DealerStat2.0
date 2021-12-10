@@ -1,7 +1,7 @@
 package com.leverx.dealerstat.config;
 
-import com.leverx.dealerstat.entity.Permission;
-import com.leverx.dealerstat.security.JwtConfigurer;
+import com.leverx.dealerstat.entity.enums.Permission;
+import com.leverx.dealerstat.security.jwt.JwtConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,7 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, "/api/comments/*").hasAuthority(Permission.READ.getPermission())
                 .antMatchers(HttpMethod.PUT, "/api/comments/*").hasAuthority(Permission.READ.getPermission())
-                // approve?
                 .antMatchers(HttpMethod.DELETE, "/api/comments/*").hasAuthority(Permission.READ.getPermission())
 
                 .antMatchers(HttpMethod.PUT, "/api/users/*").hasAuthority(Permission.UPDATE.getPermission())
@@ -75,7 +74,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-
-
-
 }

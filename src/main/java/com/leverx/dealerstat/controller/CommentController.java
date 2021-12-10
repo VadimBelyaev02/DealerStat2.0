@@ -1,10 +1,7 @@
 package com.leverx.dealerstat.controller;
 
 import com.leverx.dealerstat.dto.CommentDTO;
-import com.leverx.dealerstat.dto.UserDTO;
-import com.leverx.dealerstat.exception.AccessDeniedException;
 import com.leverx.dealerstat.exception.NotValidException;
-import com.leverx.dealerstat.security.AuthenticatedUserFactory;
 import com.leverx.dealerstat.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,20 +1,19 @@
 package com.leverx.dealerstat.entity;
 
+import com.leverx.dealerstat.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -34,7 +33,6 @@ public class User {
     private String email;
 
     @Column(name = "created_at")
- //   @Temporal(TemporalType.DATE)
     private LocalDate creatingDate;
 
     @Enumerated(value = EnumType.STRING)

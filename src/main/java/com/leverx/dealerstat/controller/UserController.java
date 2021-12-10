@@ -43,13 +43,13 @@ public class UserController {
 
     @GetMapping("/rating")
     @ResponseStatus(HttpStatus.OK)
-    public Map<UserDTO, Double> getRating() {
+    public Map<Long, Double> getRating() {
         return commentService.getRating();
     }
 
     @GetMapping("/{id}/rating")
     @ResponseStatus(HttpStatus.OK)
-    public Map<UserDTO, Double> getTraderRating(@PathVariable("id") Long id) {
+    public Map<Long, Double> getTraderRating(@PathVariable("id") Long id) {
         return commentService.getUserRating(id);
     }
 
@@ -64,7 +64,6 @@ public class UserController {
     public void deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
     }
-
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
