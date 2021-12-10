@@ -73,7 +73,7 @@ public class GameObjectServiceImpl implements GameObjectService {
     @Transactional
     public GameObjectDTO update(GameObjectDTO gameObject) {
         UserDTO user = userFactory.currentUser();
-        if (!gameObjectRepository.existsByTitle(gameObject.getTitle())) {
+        if (!gameObjectRepository.existsById(gameObject.getId())) {
             throw new NotFoundException("Game object is not found");
         }
         if (!Objects.equals(gameObject.getAuthorId(), user.getId())

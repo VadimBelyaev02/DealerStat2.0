@@ -48,24 +48,24 @@ public class DealServiceImpl implements DealService {
             throw new AlreadyExistsException("Deal is not found");
         }
         return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(deal)));
-        //    GameObject gameObject = gameObjectService.findById(deal.getGameObject().getId());
-        //    gameObject.setAuthor(deal.getToUser());
-        //    gameObjectService.save(gameObject);
 
     }
 
     @Override
     @Transactional
     public DealDTO update(DealDTO dealDTO) {
-        Deal deal = dealRepository.findById(dealDTO.getId()).orElseThrow(() -> {
+        if (!dealRepository.existsById(dealDTO.getId())) {
             throw new NotFoundException("Deal is not found");
-        });
+        }
         return dealConverter.convertToDTO(dealRepository.save(dealConverter.convertToModel(dealDTO)));
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
+        if (!dealRepository.existsById(id)) {
+            throw new NotFoundException("Deals is not found");
+        }
         dealRepository.deleteById(id);
     }
 }

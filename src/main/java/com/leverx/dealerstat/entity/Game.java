@@ -39,4 +39,12 @@ public class Game {
     public void setGameObjects(List<GameObject> gameObjects) {
         this.gameObjects = gameObjects;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

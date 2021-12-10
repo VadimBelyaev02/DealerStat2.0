@@ -47,7 +47,7 @@ public class UserServiceUnitTest {
 
         Mockito.when(userConverter.convertToDTO(user)).thenReturn(userDTO);
 
-        assertEquals(userService.findById(id), userDTO);
+        assertEquals(userService.getById(id), userDTO);
 
         Mockito.verify(userRepository, Mockito.only()).findById(id);
         Mockito.verify(userConverter, Mockito.only()).convertToDTO(user);
@@ -68,7 +68,7 @@ public class UserServiceUnitTest {
         Mockito.when(userRepository.findAll()).thenReturn(users);
         Mockito.when(userConverter.convertToDTO(user)).thenReturn(userDTO);
 
-        assertEquals(userService.findAll(), userDTOS);
+        assertEquals(userService.getAll(), userDTOS);
 
         Mockito.verify(userRepository, Mockito.only()).findAll();
         Mockito.verify(userConverter, Mockito.times(2)).convertToDTO(user);
@@ -85,7 +85,7 @@ public class UserServiceUnitTest {
         Mockito.when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
         Mockito.when(userConverter.convertToDTO(user)).thenReturn(userDTO);
 
-        assertEquals(userService.findByEmail(email), userDTO);
+        assertEquals(userService.getByEmail(email), userDTO);
 
         Mockito.verify(userRepository, Mockito.only()).findByEmail(email);
         Mockito.verify(userConverter, Mockito.only()).convertToDTO(user);
@@ -100,7 +100,7 @@ public class UserServiceUnitTest {
 
         Mockito.when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userService.findById(id));
+        assertThrows(NotFoundException.class, () -> userService.getById(id));
 
         Mockito.verify(userRepository, Mockito.only()).findById(id);
         Mockito.verify(userConverter, Mockito.never()).convertToDTO(user);

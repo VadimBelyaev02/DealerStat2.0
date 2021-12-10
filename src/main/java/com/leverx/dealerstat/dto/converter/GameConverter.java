@@ -8,10 +8,20 @@ import org.springframework.stereotype.Component;
 public class GameConverter {
 
     public GameDTO convertToDTO(final Game game) {
-        return null;
+        final Long id = game.getId();
+        final String name = game.getName();
+        return GameDTO.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
 
     public Game convertToModel(final GameDTO gameDTO) {
-        return null;
+        final Long id = gameDTO.getId();
+        final String name = gameDTO.getName();
+        return Game.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
 }

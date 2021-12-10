@@ -12,14 +12,6 @@ import java.time.LocalDate;
 @Component
 public class UserConverter {
 
-    private final UserRepository userRepository;
-    private final ConfirmationRepository confirmationRepository;
-
-    public UserConverter(UserRepository userRepository, ConfirmationRepository confirmationRepository) {
-        this.userRepository = userRepository;
-        this.confirmationRepository = confirmationRepository;
-    }
-
     public UserDTO convertToDTO(final User user) {
         final Long id = user.getId();
         final String firstName = user.getFirstName();

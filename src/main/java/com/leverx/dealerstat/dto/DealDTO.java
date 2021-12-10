@@ -14,7 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class DealDTO {
 
-    @NotBlank
     private Long id;
 
     @NotBlank

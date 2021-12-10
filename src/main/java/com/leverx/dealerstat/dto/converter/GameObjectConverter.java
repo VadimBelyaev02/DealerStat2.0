@@ -30,7 +30,7 @@ public class GameObjectConverter {
         final Long authorId = gameObject.getAuthor().getId();
         final BigDecimal price = gameObject.getPrice();
         return GameObjectDTO.builder()
-      //          .id(id)
+                .id(id)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .title(title)
@@ -41,15 +41,15 @@ public class GameObjectConverter {
     }
 
     public GameObject convertToModel(final GameObjectDTO gameObjectDTO) {
-    //    final Long id = gameObjectDTO.getId();
+        final Long id = gameObjectDTO.getId();
         final String title = gameObjectDTO.getTitle();
         final String description = gameObjectDTO.getDescription();
-     //   final User author = gameObjectRepository.getById(id).getAuthor();
         final User author = userRepository.getById(gameObjectDTO.getAuthorId());
         final BigDecimal price = gameObjectDTO.getPrice();
         final LocalDate createdAt = gameObjectDTO.getCreatedAt();
         final LocalDate updatedAt = gameObjectDTO.getUpdatedAt();
         return GameObject.builder()
+                .id(id)
                 .title(title)
                 .description(description)
                 .author(author)

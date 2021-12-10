@@ -57,8 +57,6 @@ public class GameServiceImpl implements GameService {
             throw new NotFoundException("Game is not found");
         }
         return gameConverter.convertToDTO(gameRepository.save(gameConverter.convertToModel(game)));
-     //   game.setId(id);
-     //   repository.save(game);
     }
 
     @Override
