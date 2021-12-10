@@ -43,7 +43,7 @@ public class GameObject {
     @OneToMany(mappedBy = "gameObject", cascade = CascadeType.ALL)
     private List<Deal> deals;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "gameobject_game",
                joinColumns = @JoinColumn(name = "game_object_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "game_id", referencedColumnName = "id"))

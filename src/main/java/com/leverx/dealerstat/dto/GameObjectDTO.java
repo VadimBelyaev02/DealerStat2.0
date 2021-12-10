@@ -1,8 +1,11 @@
 package com.leverx.dealerstat.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class GameObjectDTO {
 
-    @NotBlank
+    @NotNull
     private Long id;
 
     @NotBlank
@@ -21,18 +24,20 @@ public class GameObjectDTO {
     @NotBlank
     private String description;
 
-    @NotBlank
+    @NotNull
     private Long authorId;
 
-    @NotBlank
+    @NotNull
     private Long gameId;
 
-    @NotBlank
+    @NotNull
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate createdAt;
 
-    @NotBlank
+    @NotNull
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate updatedAt;
 
-    @NotBlank
+    @NotNull
     private BigDecimal price;
 }

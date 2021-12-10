@@ -3,6 +3,7 @@ package com.leverx.dealerstat.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class GameDTO {
 
-    @NotBlank
+    @NotNull
     private Long id;
 
     @NotBlank

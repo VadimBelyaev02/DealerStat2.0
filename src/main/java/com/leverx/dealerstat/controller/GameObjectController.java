@@ -59,6 +59,4 @@ public class GameObjectController {
     public List<GameObjectDTO> getAuthorizedUserGameObjects() {
         return gameObjectService.getAllByCurrentUser();
     }
-
-
 }
