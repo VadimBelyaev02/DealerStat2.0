@@ -1,5 +1,7 @@
 package com.leverx.dealerstat.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -13,13 +15,13 @@ import java.util.Date;
 @AllArgsConstructor
 public class ConfirmationDTO {
 
-    @NotBlank
     private Long id;
 
     @NotBlank
     private String code;
 
     @NotBlank
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate expirationTime;
 
     @NotBlank

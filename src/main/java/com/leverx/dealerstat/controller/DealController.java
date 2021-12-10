@@ -5,7 +5,6 @@ import com.leverx.dealerstat.exception.NotValidException;
 import com.leverx.dealerstat.service.DealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 

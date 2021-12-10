@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Builder
 @AllArgsConstructor
@@ -22,7 +21,7 @@ public class Deal {
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne()
     @JoinColumn(name = "from_id")
     private User fromUser;
 
@@ -30,7 +29,7 @@ public class Deal {
     @JoinColumn(name = "object_id")
     private GameObject gameObject;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne()
     @JoinColumn(name = "to_id")
     private User toUser;
 

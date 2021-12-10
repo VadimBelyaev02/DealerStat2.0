@@ -72,9 +72,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDTO save(CommentDTO comment) {
-        if (commentRepository.existsById(comment.getId())) {
-            throw new AlreadyExistsException("Comment is already exists");
-        }
         UserDTO author = userFactory.currentUser();
         if (comment.getUserId().equals(author.getId())) {
             throw new AccessDeniedException("You can't comment yourself!");

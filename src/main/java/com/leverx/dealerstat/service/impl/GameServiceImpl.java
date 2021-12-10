@@ -44,7 +44,7 @@ public class GameServiceImpl implements GameService {
     @Override
     @Transactional
     public GameDTO save(GameDTO game) {
-        if (gameRepository.existsById(game.getId())) {
+        if (gameRepository.existsByName(game.getName())) {
             throw new AlreadyExistsException("Game is already exists");
         }
         return gameConverter.convertToDTO(gameRepository.save(gameConverter.convertToModel(game)));

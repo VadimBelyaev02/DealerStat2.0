@@ -7,7 +7,6 @@ public enum Permission {
     READ("read"),
     WRITE("write");
 
-
     public String getPermission() {
         return permission;
     }
